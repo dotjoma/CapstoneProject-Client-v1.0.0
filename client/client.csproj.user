@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Compile Update="Controls\Products\CardDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\AuditTrail\AuditHome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\BackupControl\AuthForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\BackupControl\BackupPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\BackupControl\RestoreBackupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\BackupControl\SelectedDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\BestSelling\BestSellingHome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Dashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\DiscountManagement\AddDiscount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\DiscountManagement\DiscountHome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\InventoryManagement\AddBatch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\InventoryManagement\AddInventoryItem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\InventoryManagement\EditBatch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\InventoryManagement\InventoryHome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\InventoryManagement\NewInventoryCategory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\InventoryManagement\NewSupplier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\InventoryManagement\NewUnit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\InventoryManagement\ViewBatches.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\MainMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Order\ApplyDiscount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Order\DiscountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Order\OrderEntryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Order\PaymentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ProductManagement\AddIngredientToRecipe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ProductManagement\NewCategory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ProductManagement\AddProduct.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ProductManagement\NewUnit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ProductManagement\ProductHome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\ProductManagement\SearchIngredients.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Register.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\SalesReport\SalesReportHome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\UserManagement\UserHome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

@@ -21,9 +21,8 @@ namespace client.Forms.ProductManagement
     public partial class AddProduct : Form
     {
         private readonly ProductController _productController = new ProductController();
-        private readonly UnitController _unitController = new UnitController();
-        private readonly CategoryController _categoryController = new CategoryController();
-        private readonly SubCategoryController _subCategoryController = new SubCategoryController();
+
+        ToolTip toolTip = new ToolTip();
 
         private int _selectedId = 0;
 
@@ -46,7 +45,6 @@ namespace client.Forms.ProductManagement
 
         private void AddProduct_Load(object sender, EventArgs e)
         {
-            //this.ShowInTaskbar = false;
             try
             {
                 InitializeComboboxes();
@@ -74,6 +72,12 @@ namespace client.Forms.ProductManagement
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
+
+            toolTip.AutoPopDelay = 10000;
+            toolTip.InitialDelay = 100;
+            toolTip.ReshowDelay = 100;
+            toolTip.ShowAlways = true;
+            toolTip.SetToolTip(pbKnowMore, "We'll erase the background of your uploaded menu and apply the system's default background style.");
         }
 
         private void LoadProductDetails(Product product)
@@ -217,195 +221,202 @@ namespace client.Forms.ProductManagement
 
         private void PickImage(int modelSelection)
         {
-            // Map the model selection to actual model names
-            string selectedModel = modelSelection switch
+            if(cbUseSystemBackground.Checked)
             {
-                1 => "u2net",          // High quality but slow
-                2 => "u2netp",         // Balanced
-                3 => "silueta",        // Fastest
-                4 => "isnet-general-use", // General use
-                _ => "u2netp"          // Default to balanced
-            };
-
-            // Save user preference
-            Properties.Settings.Default.LastUsedModel = selectedModel;
-            Properties.Settings.Default.Save();
-
-            // Proceed with file selection
-            using (OpenFileDialog ofd = new OpenFileDialog())
-            {
-                ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff";
-                if (ofd.ShowDialog() == DialogResult.OK)
+                
+                string selectedModel = modelSelection switch
                 {
-                    string inputPath = ofd.FileName;
-                    string outputPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".png");
+                    1 => "u2net",               // High quality but slow
+                    2 => "u2netp",              // Balanced
+                    3 => "silueta",             // Fastest
+                    4 => "isnet-general-use",   // General use
+                    _ => "u2netp"               // Default to balanced
+                };
 
-                    string exeDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                    string modelsDir = Path.Combine(exeDirectory, "includes", "models");
-                    string requiredModel = Path.Combine(modelsDir, $"{selectedModel}.onnx");
+                // save user preference
+                Properties.Settings.Default.LastUsedModel = selectedModel;
+                Properties.Settings.Default.Save();
 
-                    if (!File.Exists(requiredModel))
+                // file selection
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff";
+                    if (ofd.ShowDialog() == DialogResult.OK)
                     {
-                        string availableModels = string.Join(", ", Directory.GetFiles(modelsDir, "*.onnx")
-                                                            .Select(Path.GetFileNameWithoutExtension));
+                        string inputPath = ofd.FileName;
+                        string outputPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".png");
 
-                        MessageBox.Show($"Model {selectedModel}.onnx not found in models folder.\n\n" +
-                                       $"Available models: {availableModels}");
-                        return;
-                    }
+                        string exeDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        string modelsDir = Path.Combine(exeDirectory, "includes", "models");
+                        string requiredModel = Path.Combine(modelsDir, $"{selectedModel}.onnx");
 
-                    string pythonScript = Path.Combine(exeDirectory, "includes", "remove_bg.exe");
-
-                    if (!Directory.Exists(modelsDir))
-                    {
-                        Directory.CreateDirectory(modelsDir);
-                        MessageBox.Show("Please place all model files (.onnx) in: " + modelsDir);
-                        return;
-                    }
-
-                    try
-                    {
-                        Logger.Write("REMOVE_BG_DEBUG", $"[Step 1] Input Image: {inputPath}");
-                        Logger.Write("REMOVE_BG_DEBUG", $"[Step 1] Output Path: {outputPath}");
-                        Logger.Write("REMOVE_BG_DEBUG", $"[Step 1] Python Script: {pythonScript}");
-                        Logger.Write("REMOVE_BG_DEBUG", $"[Step 1] Selected Model: {selectedModel}");
-
-                        if (!File.Exists(pythonScript))
+                        if (!File.Exists(requiredModel))
                         {
-                            Logger.Write("REMOVE_BG_DEBUG", $"[Step 2] ERROR: remove_bg.exe not found at: {pythonScript}");
-                            MessageBox.Show("remove_bg.exe not found. Check the path.");
+                            string availableModels = string.Join(", ", Directory.GetFiles(modelsDir, "*.onnx")
+                                                                .Select(Path.GetFileNameWithoutExtension));
+
+                            MessageBox.Show($"Model {selectedModel}.onnx not found in models folder.\n\n" +
+                                           $"Available models: {availableModels}");
                             return;
                         }
 
-                        ProcessStartInfo psi = new ProcessStartInfo
+                        string pythonScript = Path.Combine(exeDirectory, "includes", "remove_bg.exe");
+
+                        if (!Directory.Exists(modelsDir))
                         {
-                            FileName = Path.Combine(exeDirectory, "includes", "remove_bg.exe"),
-                            Arguments = $"\"{inputPath}\" \"{outputPath}\" {selectedModel}",
-                            UseShellExecute = false,
-                            RedirectStandardOutput = true,
-                            RedirectStandardError = true,
-                            CreateNoWindow = true,
-                            WorkingDirectory = Path.GetDirectoryName(pythonScript)
-                        };
-                        psi.EnvironmentVariables["U2NET_HOME"] = modelsDir;
+                            Directory.CreateDirectory(modelsDir);
+                            MessageBox.Show("Please place all model files (.onnx) in: " + modelsDir);
+                            return;
+                        }
 
-                        Logger.Write("REMOVE_BG_DEBUG", $"[MODEL PATH] Looking for model at: {Path.Combine(modelsDir, $"{selectedModel}.onnx")}");
-
-                        Logger.Write("REMOVE_BG_DEBUG", "[Step 3] Starting Python process...");
-
-                        using (var processingForm = new Form())
+                        try
                         {
-                            processingForm.Text = "Processing...";
-                            processingForm.Size = new Size(350, 150);
-                            processingForm.FormBorderStyle = FormBorderStyle.FixedDialog;
-                            processingForm.StartPosition = FormStartPosition.CenterParent;
-
-                            var progressLabel = new Label
+                            if (!File.Exists(pythonScript))
                             {
-                                Text = $"Processing {Path.GetFileName(inputPath)}...",
-                                Dock = DockStyle.Top,
-                                TextAlign = ContentAlignment.MiddleCenter
-                            };
-
-                            var cancelButton = new Button
-                            {
-                                Text = "Cancel",
-                                DialogResult = DialogResult.Cancel,
-                                Location = new Point(130, 80)
-                            };
-
-                            processingForm.Controls.AddRange(new Control[] { progressLabel, cancelButton });
-                            processingForm.CancelButton = cancelButton;
-
-                            var cts = new CancellationTokenSource();
-                            bool processCompleted = false;
-
-                            Task.Run(() =>
-                            {
-                                try
-                                {
-                                    using (Process proc = new Process { StartInfo = psi })
-                                    {
-                                        proc.Start();
-
-                                        // Read output asynchronously
-                                        var outputTask = proc.StandardOutput.ReadToEndAsync();
-                                        var errorTask = proc.StandardError.ReadToEndAsync();
-
-                                        // Wait for exit with timeout
-                                        if (!proc.WaitForExit(300000)) // 90 second timeout
-                                        {
-                                            if (!cts.IsCancellationRequested)
-                                            {
-                                                proc.Kill();
-                                                processingForm.Invoke(() => {
-                                                    MessageBox.Show("Process timed out after 90 seconds");
-                                                });
-                                            }
-                                        }
-
-                                        var stdOut = outputTask.Result;
-                                        var stdErr = errorTask.Result;
-
-                                        Logger.Write("REMOVE_BG_DEBUG", $"[Step 4] Process exited with code: {proc.ExitCode}");
-                                        if (!string.IsNullOrWhiteSpace(stdOut))
-                                            Logger.Write("REMOVE_BG_DEBUG", $"[Step 4] STDOUT:\n{stdOut}");
-                                        if (!string.IsNullOrWhiteSpace(stdErr))
-                                            Logger.Write("REMOVE_BG_DEBUG", $"[Step 4] STDERR:\n{stdErr}");
-
-                                        processCompleted = true;
-                                        processingForm.Invoke(() => {
-                                            processingForm.DialogResult = proc.ExitCode == 0 ? DialogResult.OK : DialogResult.Abort;
-                                        });
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Logger.Write("REMOVE_BG_DEBUG", $"[PROCESS ERROR] {ex}");
-                                    processingForm.Invoke(() => {
-                                        MessageBox.Show($"Process error: {ex.Message}");
-                                    });
-                                }
-                            }, cts.Token);
-
-                            cancelButton.Click += (s, e) => {
-                                if (!processCompleted)
-                                {
-                                    cts.Cancel();
-                                    Logger.Write("REMOVE_BG_DEBUG", "[Step 4] Process cancelled by user");
-                                }
-                            };
-
-                            if (processingForm.ShowDialog() == DialogResult.Abort)
-                            {
-                                MessageBox.Show("Background removal failed. Check logs for details.");
+                                Logger.Write("REMOVE_BG_DEBUG", $"ERROR: remove_bg.exe not found at: {pythonScript}");
+                                MessageBox.Show("remove_bg.exe not found. Check the path.");
                                 return;
                             }
 
-                            if (cts.IsCancellationRequested) return;
-                        }
-
-                        if (File.Exists(outputPath))
-                        {
-                            Logger.Write("REMOVE_BG_DEBUG", "[Step 5] Output file created successfully.");
-                            using (var stream = new FileStream(outputPath, FileMode.Open, FileAccess.Read))
+                            ProcessStartInfo psi = new ProcessStartInfo
                             {
-                                var originalImage = Image.FromStream(stream);
-                                pbImage.Image = originalImage;
-                                Logger.Write("REMOVE_BG_DEBUG", "[Step 5] Image loaded into PictureBox.");
+                                FileName = Path.Combine(exeDirectory, "includes", "remove_bg.exe"),
+                                Arguments = $"\"{inputPath}\" \"{outputPath}\" {selectedModel}",
+                                UseShellExecute = false,
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true,
+                                CreateNoWindow = true,
+                                WorkingDirectory = Path.GetDirectoryName(pythonScript)
+                            };
+                            psi.EnvironmentVariables["U2NET_HOME"] = modelsDir;
+
+                            Logger.Write("REMOVE_BG_DEBUG", $"[MODEL PATH] Looking for model at: {Path.Combine(modelsDir, $"{selectedModel}.onnx")}");
+                            Logger.Write("REMOVE_BG_DEBUG", "Starting Python process...");
+
+                            using (var processingForm = new Form())
+                            {
+                                processingForm.Text = "Processing...";
+                                processingForm.Size = new Size(350, 150);
+                                processingForm.FormBorderStyle = FormBorderStyle.FixedDialog;
+                                processingForm.StartPosition = FormStartPosition.CenterParent;
+
+                                var progressLabel = new Label
+                                {
+                                    Text = $"Processing {Path.GetFileName(inputPath)}...",
+                                    Dock = DockStyle.Top,
+                                    TextAlign = ContentAlignment.MiddleCenter
+                                };
+
+                                var cancelButton = new Button
+                                {
+                                    Text = "Cancel",
+                                    DialogResult = DialogResult.Cancel,
+                                    Location = new Point(130, 80)
+                                };
+
+                                processingForm.Controls.AddRange(new Control[] { progressLabel, cancelButton });
+                                processingForm.CancelButton = cancelButton;
+
+                                var cts = new CancellationTokenSource();
+                                bool processCompleted = false;
+
+                                Task.Run(() =>
+                                {
+                                    try
+                                    {
+                                        using (Process proc = new Process { StartInfo = psi })
+                                        {
+                                            proc.Start();
+
+                                            var outputTask = proc.StandardOutput.ReadToEndAsync();
+                                            var errorTask = proc.StandardError.ReadToEndAsync();
+
+                                            // Wait for exit with timeout
+                                            if (!proc.WaitForExit(300000)) // 5 minutes timeout
+                                            {
+                                                if (!cts.IsCancellationRequested)
+                                                {
+                                                    proc.Kill();
+                                                    processingForm.Invoke(() => {
+                                                        MessageBox.Show("Process timed out after 5 minutes");
+                                                    });
+                                                }
+                                            }
+
+                                            var stdOut = outputTask.Result;
+                                            var stdErr = errorTask.Result;
+
+                                            Logger.Write("REMOVE_BG_DEBUG", $"[Step 4] Process exited with code: {proc.ExitCode}");
+                                            if (!string.IsNullOrWhiteSpace(stdOut))
+                                                Logger.Write("REMOVE_BG_DEBUG", $"STDOUT: {stdOut}");
+                                            if (!string.IsNullOrWhiteSpace(stdErr))
+                                                Logger.Write("REMOVE_BG_DEBUG", $"STDERR: {stdErr}");
+
+                                            processCompleted = true;
+                                            processingForm.Invoke(() => {
+                                                processingForm.DialogResult = proc.ExitCode == 0 ? DialogResult.OK : DialogResult.Abort;
+                                            });
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Logger.Write("REMOVE_BG_DEBUG", $"[PROCESS ERROR] {ex}");
+                                        processingForm.Invoke(() => {
+                                            MessageBox.Show($"Process error: {ex.Message}");
+                                        });
+                                    }
+                                }, cts.Token);
+
+                                cancelButton.Click += (s, e) => {
+                                    if (!processCompleted)
+                                    {
+                                        cts.Cancel();
+                                        Logger.Write("REMOVE_BG_DEBUG", "Process cancelled by user");
+                                    }
+                                };
+
+                                if (processingForm.ShowDialog() == DialogResult.Abort)
+                                {
+                                    MessageBox.Show("Background removal failed. Check logs for details.");
+                                    return;
+                                }
+
+                                if (cts.IsCancellationRequested) return;
                             }
-                            File.Delete(outputPath);
+
+                            if (File.Exists(outputPath))
+                            {
+                                Logger.Write("REMOVE_BG_DEBUG", "Output file created successfully.");
+                                using (var stream = new FileStream(outputPath, FileMode.Open, FileAccess.Read))
+                                {
+                                    var originalImage = Image.FromStream(stream);
+                                    pbImage.Image = originalImage;
+                                    Logger.Write("REMOVE_BG_DEBUG", "Image loaded into PictureBox.");
+                                }
+                                File.Delete(outputPath);
+                            }
+                            else
+                            {
+                                Logger.Write("REMOVE_BG_DEBUG", "Output image not found after process.");
+                                MessageBox.Show("Failed to generate output image.");
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Logger.Write("REMOVE_BG_DEBUG", "[Step 5] ❌ Output image not found after process.");
-                            MessageBox.Show("Failed to generate output image.");
+                            Logger.Write("REMOVE_BG_DEBUG", $"[ERROR] Exception: {ex.ToString()}");
+                            MessageBox.Show($"Error: {ex.Message}");
                         }
                     }
-                    catch (Exception ex)
+                }
+            }
+            else
+            {
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff";
+                    if (ofd.ShowDialog() == DialogResult.OK)
                     {
-                        Logger.Write("REMOVE_BG_DEBUG", $"[ERROR] Exception: {ex.ToString()}");
-                        MessageBox.Show($"Error: {ex.Message}");
+                        pbImage.Image = Image.FromFile(ofd.FileName);
                     }
                 }
             }

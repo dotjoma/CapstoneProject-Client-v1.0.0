@@ -35,14 +35,13 @@
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             panel1 = new Panel();
+            cboMeasure = new ComboBox();
+            label9 = new Label();
             btnSearchIngredient = new PictureBox();
             label2 = new Label();
             btnCancel = new Button();
             btnSave = new Button();
             dgvIngredients = new DataGridView();
-            ingredient = new DataGridViewTextBoxColumn();
-            quantity = new DataGridViewTextBoxColumn();
-            action = new DataGridViewImageColumn();
             label7 = new Label();
             btnAdd = new Button();
             txtQuantity = new TextBox();
@@ -56,6 +55,10 @@
             lblHeader = new Label();
             label3 = new Label();
             label8 = new Label();
+            ingredient = new DataGridViewTextBoxColumn();
+            measure = new DataGridViewTextBoxColumn();
+            quantity = new DataGridViewTextBoxColumn();
+            action = new DataGridViewImageColumn();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)btnSearchIngredient).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvIngredients).BeginInit();
@@ -65,6 +68,8 @@
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(cboMeasure);
+            panel1.Controls.Add(label9);
             panel1.Controls.Add(btnSearchIngredient);
             panel1.Controls.Add(label2);
             panel1.Controls.Add(btnCancel);
@@ -82,8 +87,30 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(507, 432);
+            panel1.Size = new Size(507, 469);
             panel1.TabIndex = 0;
+            // 
+            // cboMeasure
+            // 
+            cboMeasure.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboMeasure.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            cboMeasure.FormattingEnabled = true;
+            cboMeasure.Location = new Point(22, 199);
+            cboMeasure.Name = "cboMeasure";
+            cboMeasure.Size = new Size(191, 29);
+            cboMeasure.TabIndex = 80;
+            cboMeasure.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.BackColor = Color.Transparent;
+            label9.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label9.Location = new Point(21, 175);
+            label9.Name = "label9";
+            label9.Size = new Size(115, 21);
+            label9.TabIndex = 79;
+            label9.Text = "Measurement:";
             // 
             // btnSearchIngredient
             // 
@@ -111,7 +138,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Right;
-            btnCancel.Location = new Point(315, 397);
+            btnCancel.Location = new Point(315, 435);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(82, 30);
             btnCancel.TabIndex = 1;
@@ -122,7 +149,7 @@
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Right;
-            btnSave.Location = new Point(403, 397);
+            btnSave.Location = new Point(403, 435);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(82, 30);
             btnSave.TabIndex = 0;
@@ -154,7 +181,7 @@
             dgvIngredients.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvIngredients.ColumnHeadersHeight = 30;
             dgvIngredients.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dgvIngredients.Columns.AddRange(new DataGridViewColumn[] { ingredient, quantity, action });
+            dgvIngredients.Columns.AddRange(new DataGridViewColumn[] { ingredient, measure, quantity, action });
             dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = Color.White;
             dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -165,7 +192,7 @@
             dgvIngredients.DefaultCellStyle = dataGridViewCellStyle5;
             dgvIngredients.EnableHeadersVisualStyles = false;
             dgvIngredients.GridColor = Color.White;
-            dgvIngredients.Location = new Point(20, 226);
+            dgvIngredients.Location = new Point(20, 262);
             dgvIngredients.MultiSelect = false;
             dgvIngredients.Name = "dgvIngredients";
             dgvIngredients.ReadOnly = true;
@@ -186,41 +213,12 @@
             dgvIngredients.TabStop = false;
             dgvIngredients.CellContentClick += dgvIngredients_CellContentClick;
             // 
-            // ingredient
-            // 
-            ingredient.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            ingredient.DefaultCellStyle = dataGridViewCellStyle3;
-            ingredient.FillWeight = 115.0222F;
-            ingredient.HeaderText = "Ingredient";
-            ingredient.MinimumWidth = 340;
-            ingredient.Name = "ingredient";
-            ingredient.ReadOnly = true;
-            // 
-            // quantity
-            // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
-            quantity.DefaultCellStyle = dataGridViewCellStyle4;
-            quantity.HeaderText = "Quantity";
-            quantity.MinimumWidth = 60;
-            quantity.Name = "quantity";
-            quantity.ReadOnly = true;
-            // 
-            // action
-            // 
-            action.HeaderText = "Action";
-            action.MinimumWidth = 60;
-            action.Name = "action";
-            action.ReadOnly = true;
-            action.Resizable = DataGridViewTriState.True;
-            action.SortMode = DataGridViewColumnSortMode.Automatic;
-            // 
             // label7
             // 
             label7.AutoSize = true;
             label7.BackColor = Color.Transparent;
             label7.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label7.Location = new Point(20, 202);
+            label7.Location = new Point(20, 238);
             label7.Name = "label7";
             label7.Size = new Size(157, 21);
             label7.TabIndex = 76;
@@ -228,7 +226,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(351, 173);
+            btnAdd.Location = new Point(351, 198);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(134, 30);
             btnAdd.TabIndex = 74;
@@ -367,12 +365,48 @@
             label8.TabIndex = 0;
             label8.Text = "Inventory Management - Add New Item";
             // 
+            // ingredient
+            // 
+            ingredient.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            ingredient.DefaultCellStyle = dataGridViewCellStyle3;
+            ingredient.FillWeight = 115.0222F;
+            ingredient.HeaderText = "Ingredient";
+            ingredient.MinimumWidth = 280;
+            ingredient.Name = "ingredient";
+            ingredient.ReadOnly = true;
+            // 
+            // measure
+            // 
+            measure.HeaderText = "Measure";
+            measure.MinimumWidth = 60;
+            measure.Name = "measure";
+            measure.ReadOnly = true;
+            // 
+            // quantity
+            // 
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            quantity.DefaultCellStyle = dataGridViewCellStyle4;
+            quantity.HeaderText = "Quantity";
+            quantity.MinimumWidth = 60;
+            quantity.Name = "quantity";
+            quantity.ReadOnly = true;
+            // 
+            // action
+            // 
+            action.HeaderText = "Action";
+            action.MinimumWidth = 60;
+            action.Name = "action";
+            action.ReadOnly = true;
+            action.Resizable = DataGridViewTriState.True;
+            action.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
             // AddIngredientToRecipe
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(232, 232, 232);
-            ClientSize = new Size(507, 432);
+            ClientSize = new Size(507, 469);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.None;
             Name = "AddIngredientToRecipe";
@@ -409,9 +443,12 @@
         private Button btnAdd;
         private Label label7;
         private DataGridView dgvIngredients;
+        private PictureBox btnSearchIngredient;
+        private ComboBox cboMeasure;
+        private Label label9;
         private DataGridViewTextBoxColumn ingredient;
+        private DataGridViewTextBoxColumn measure;
         private DataGridViewTextBoxColumn quantity;
         private DataGridViewImageColumn action;
-        private PictureBox btnSearchIngredient;
     }
 }

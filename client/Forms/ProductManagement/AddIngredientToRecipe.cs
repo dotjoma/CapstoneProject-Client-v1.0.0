@@ -32,6 +32,7 @@ namespace client.Forms.ProductManagement
         {
             GetInventoryItems();
             LoadRecipes();
+            GetInventoryUnitMeasure();
         }
 
         private void LoadRecipes()
@@ -48,10 +49,12 @@ namespace client.Forms.ProductManagement
             foreach (var entry in RecipeBuilder.SelectedIngredients)
             {
                 var item = entry.Value.item;
+                var measure = entry.Value.measureSymbol;
                 var quantity = entry.Value.quantity;
 
                 dgvIngredients.Rows.Add(
                     item.ItemName,
+                    measure,
                     quantity,
                     Properties.Resources.trash_red_20
                 );
@@ -175,53 +178,7 @@ namespace client.Forms.ProductManagement
 
         private void cboIngredient_TextChanged(object sender, EventArgs e)
         {
-            //string searchText = cboIngredient.Text.ToLower();
-
-            //if (searchText == _lastSearchText)
-            //    return;
-
-            //_lastSearchText = searchText;
-
-            //_searchTimer?.Dispose();
-
-            //_searchTimer = new System.Threading.Timer(_ =>
-            //{
-            //    cboIngredient.Invoke((MethodInvoker)delegate
-            //    {
-            //        if (string.IsNullOrWhiteSpace(searchText))
-            //        {
-            //            cboIngredient.DroppedDown = false;
-            //            return;
-            //        }
-
-            //        int originalSelectionStart = cboIngredient.SelectionStart;
-            //        int originalSelectionLength = cboIngredient.SelectionLength;
-            //        string originalText = cboIngredient.Text;
-
-            //        bool found = false;
-            //        for (int i = 0; i < cboIngredient.Items.Count; i++)
-            //        {
-            //            string? itemText = cboIngredient.Items[i]?.ToString()?.ToLower();
-            //            if (!string.IsNullOrEmpty(itemText) && itemText.Contains(searchText))
-            //            {
-            //                found = true;
-            //                break;
-            //            }
-            //        }
-
-            //        if (found)
-            //        {
-            //            cboIngredient.DroppedDown = true;
-            //            cboIngredient.Text = originalText;
-            //            cboIngredient.SelectionStart = originalSelectionStart;
-            //            cboIngredient.SelectionLength = originalSelectionLength;
-            //        }
-            //        else
-            //        {
-            //            cboIngredient.DroppedDown = false;
-            //        }
-            //    });
-            //}, null, 300, Timeout.Infinite);
+           
         }
 
         private void AddIngredientToRecipe_FormClosing(object sender, FormClosingEventArgs e)
@@ -254,15 +211,26 @@ namespace client.Forms.ProductManagement
                 return;
             }
 
+            if (cboMeasure.SelectedIndex == 0 || cboMeasure.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select an measurement first.",
+                    "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             var item = CurrentInventoryItem.Current;
+
+            var selectedUnit = CurrentInventoryUnitMeasure.Current;
+            string selectedUnitSymbol = selectedUnit?.measureSymbol ?? "Unknown";
 
             if (RecipeBuilder.SelectedIngredients.TryGetValue(item.ItemId, out var existing))
             {
-                RecipeBuilder.SelectedIngredients[item.ItemId] = (item, existing.quantity + quantity, item.UnitMeasureSymbol);
+                RecipeBuilder.SelectedIngredients[item.ItemId] = (item, existing.quantity + quantity, selectedUnitSymbol);
             }
             else
             {
-                RecipeBuilder.SelectedIngredients[item.ItemId] = (item, quantity, item.UnitMeasureSymbol);
+                RecipeBuilder.SelectedIngredients[item.ItemId] = (item, quantity, selectedUnitSymbol);
             }
 
             dgvIngredients.Rows.Clear();
@@ -270,10 +238,12 @@ namespace client.Forms.ProductManagement
             foreach (var entry in RecipeBuilder.SelectedIngredients)
             {
                 var i = entry.Value.item;
+                var m = entry.Value.measureSymbol;
                 var q = entry.Value.quantity;
 
                 dgvIngredients.Rows.Add(
-                    i.ItemName, 
+                    i.ItemName,
+                    m,
                     q,
                     Properties.Resources.trash_red_20
                 );
@@ -314,6 +284,99 @@ namespace client.Forms.ProductManagement
                 }
 
                 dgvIngredients.Rows.RemoveAt(e.RowIndex);
+            }
+        }
+
+
+        public void GetInventoryUnitMeasure()
+        {
+            cboMeasure.Items.Clear();
+            cboMeasure.Items.Add("Select Measurement");
+
+            var suppliers = CurrentInventoryUnitMeasure.AllUnitMeasures;
+
+            if (suppliers != null && suppliers.Count > 0)
+            {
+                foreach (var sup in suppliers)
+                {
+                    if (!string.IsNullOrEmpty(sup.measureName))
+                    {
+
+                        if (!string.IsNullOrEmpty(sup.measureSymbol))
+                        {
+                            cboMeasure.Items.Add($"{sup.measureName} ({sup.measureSymbol})");
+                        }
+                        else
+                        {
+                            cboMeasure.Items.Add($"{sup.measureName}");
+                        }
+                    }
+                    else
+                    {
+                        Logger.Write("MEASUREMENT_WARNING", "Measurement name is null or empty, skipping.");
+                    }
+                }
+            }
+            else
+            {
+                Logger.Write("MEASUREMENT_WARNING", "No measures found.");
+            }
+
+            cboMeasure.Items.Add("+ Add Measurement");
+            cboMeasure.SelectedIndex = 0;
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cboMeasure.SelectedIndex == 0)
+            {
+                CurrentInventoryUnitMeasure.SetCurrentUnitMeasure(null);
+                return;
+            }
+
+            if (cboMeasure.SelectedIndex == cboMeasure.Items.Count - 1)
+            {
+                using (var newunitfrm = new NewUnit(this))
+                {
+                    newunitfrm.StartPosition = FormStartPosition.Manual;
+                    newunitfrm.StartPosition = FormStartPosition.CenterParent;
+                    newunitfrm.ShowDialog(this);
+                }
+
+                return;
+            }
+
+            if (cboMeasure.SelectedIndex > 0 &&
+                CurrentInventoryUnitMeasure.AllUnitMeasures != null &&
+                (cboMeasure.SelectedIndex - 1) < CurrentInventoryUnitMeasure.AllUnitMeasures.Count)
+            {
+                try
+                {
+                    var selectedUnitMeasure = CurrentInventoryUnitMeasure.AllUnitMeasures[cboMeasure.SelectedIndex - 1];
+
+                    if (selectedUnitMeasure != null && selectedUnitMeasure.Id > 0)
+                    {
+                        CurrentInventoryUnitMeasure.SetCurrentUnitMeasure(selectedUnitMeasure);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid unit measure selected", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        cboMeasure.SelectedIndex = 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error selecting unit measure: " + ex.Message, "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    cboMeasure.SelectedIndex = 0;
+                }
+            }
+            else
+            {
+                cboMeasure.SelectedIndex = 0;
             }
         }
     }

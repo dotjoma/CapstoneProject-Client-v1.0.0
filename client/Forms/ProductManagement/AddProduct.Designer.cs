@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddProduct));
             pbImage = new PictureBox();
             label7 = new Label();
@@ -56,15 +56,19 @@
             label3 = new Label();
             label8 = new Label();
             panel2 = new Panel();
+            pbKnowMore = new PictureBox();
+            cbUseSystemBackground = new CheckBox();
             panel3 = new Panel();
+            btnRemoveIngredients = new Button();
             dgvIngredients = new DataGridView();
             ingredient = new DataGridViewTextBoxColumn();
             btnManageIngredients = new Button();
             label1 = new Label();
             label9 = new Label();
-            btnRemoveIngredients = new Button();
             ((System.ComponentModel.ISupportInitialize)pbImage).BeginInit();
             pnlHeader.SuspendLayout();
+            panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbKnowMore).BeginInit();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvIngredients).BeginInit();
             SuspendLayout();
@@ -74,7 +78,7 @@
             pbImage.BorderStyle = BorderStyle.FixedSingle;
             pbImage.Location = new Point(436, 94);
             pbImage.Name = "pbImage";
-            pbImage.Size = new Size(186, 140);
+            pbImage.Size = new Size(180, 140);
             pbImage.SizeMode = PictureBoxSizeMode.StretchImage;
             pbImage.TabIndex = 12;
             pbImage.TabStop = false;
@@ -227,9 +231,9 @@
             // 
             btnUploadImage.FlatStyle = FlatStyle.Popup;
             btnUploadImage.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnUploadImage.Location = new Point(436, 261);
+            btnUploadImage.Location = new Point(424, 185);
             btnUploadImage.Name = "btnUploadImage";
-            btnUploadImage.Size = new Size(186, 33);
+            btnUploadImage.Size = new Size(180, 33);
             btnUploadImage.TabIndex = 28;
             btnUploadImage.Text = "UPLOAD IMAGE";
             btnUploadImage.UseVisualStyleBackColor = true;
@@ -342,10 +346,35 @@
             // panel2
             // 
             panel2.BackColor = Color.White;
+            panel2.Controls.Add(pbKnowMore);
+            panel2.Controls.Add(cbUseSystemBackground);
+            panel2.Controls.Add(btnUploadImage);
             panel2.Location = new Point(12, 80);
             panel2.Name = "panel2";
             panel2.Size = new Size(623, 262);
             panel2.TabIndex = 65;
+            // 
+            // pbKnowMore
+            // 
+            pbKnowMore.Image = Properties.Resources.question_mark_24;
+            pbKnowMore.Location = new Point(585, 160);
+            pbKnowMore.Name = "pbKnowMore";
+            pbKnowMore.Size = new Size(19, 17);
+            pbKnowMore.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbKnowMore.TabIndex = 83;
+            pbKnowMore.TabStop = false;
+            // 
+            // cbUseSystemBackground
+            // 
+            cbUseSystemBackground.AutoSize = true;
+            cbUseSystemBackground.BackColor = Color.White;
+            cbUseSystemBackground.Font = new Font("Segoe UI", 8F);
+            cbUseSystemBackground.Location = new Point(424, 160);
+            cbUseSystemBackground.Name = "cbUseSystemBackground";
+            cbUseSystemBackground.Size = new Size(151, 17);
+            cbUseSystemBackground.TabIndex = 32;
+            cbUseSystemBackground.Text = "Use default background";
+            cbUseSystemBackground.UseVisualStyleBackColor = false;
             // 
             // panel3
             // 
@@ -359,40 +388,55 @@
             panel3.Size = new Size(623, 200);
             panel3.TabIndex = 66;
             // 
+            // btnRemoveIngredients
+            // 
+            btnRemoveIngredients.BackColor = Color.FromArgb(244, 67, 54);
+            btnRemoveIngredients.FlatAppearance.BorderSize = 0;
+            btnRemoveIngredients.FlatStyle = FlatStyle.Flat;
+            btnRemoveIngredients.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnRemoveIngredients.ForeColor = Color.White;
+            btnRemoveIngredients.Location = new Point(193, 28);
+            btnRemoveIngredients.Name = "btnRemoveIngredients";
+            btnRemoveIngredients.Size = new Size(154, 30);
+            btnRemoveIngredients.TabIndex = 82;
+            btnRemoveIngredients.Text = "REMOVE INGREDIENTS";
+            btnRemoveIngredients.UseVisualStyleBackColor = false;
+            btnRemoveIngredients.Click += btnRemoveIngredients_Click;
+            // 
             // dgvIngredients
             // 
             dgvIngredients.AllowUserToAddRows = false;
             dgvIngredients.AllowUserToDeleteRows = false;
             dgvIngredients.AllowUserToResizeColumns = false;
             dgvIngredients.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = Color.WhiteSmoke;
-            dataGridViewCellStyle1.ForeColor = Color.Black;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.MenuHighlight;
-            dataGridViewCellStyle1.SelectionForeColor = Color.Black;
-            dgvIngredients.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle6.BackColor = Color.WhiteSmoke;
+            dataGridViewCellStyle6.ForeColor = Color.Black;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.MenuHighlight;
+            dataGridViewCellStyle6.SelectionForeColor = Color.Black;
+            dgvIngredients.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
             dgvIngredients.Anchor = AnchorStyles.Top;
             dgvIngredients.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvIngredients.BackgroundColor = Color.White;
             dgvIngredients.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(204, 204, 204);
-            dataGridViewCellStyle2.Font = new Font("Segoe UI Semibold", 8.5F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(204, 204, 204);
-            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvIngredients.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = Color.FromArgb(204, 204, 204);
+            dataGridViewCellStyle7.Font = new Font("Segoe UI Semibold", 8.5F, FontStyle.Bold);
+            dataGridViewCellStyle7.ForeColor = Color.Black;
+            dataGridViewCellStyle7.SelectionBackColor = Color.FromArgb(204, 204, 204);
+            dataGridViewCellStyle7.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
+            dgvIngredients.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             dgvIngredients.ColumnHeadersHeight = 25;
             dgvIngredients.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvIngredients.Columns.AddRange(new DataGridViewColumn[] { ingredient });
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = Color.White;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 8.5F);
-            dataGridViewCellStyle4.ForeColor = Color.Black;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.MenuHighlight;
-            dataGridViewCellStyle4.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
-            dgvIngredients.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = Color.White;
+            dataGridViewCellStyle9.Font = new Font("Segoe UI", 8.5F);
+            dataGridViewCellStyle9.ForeColor = Color.Black;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.MenuHighlight;
+            dataGridViewCellStyle9.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.False;
+            dgvIngredients.DefaultCellStyle = dataGridViewCellStyle9;
             dgvIngredients.Enabled = false;
             dgvIngredients.EnableHeadersVisualStyles = false;
             dgvIngredients.GridColor = Color.White;
@@ -401,14 +445,14 @@
             dgvIngredients.Name = "dgvIngredients";
             dgvIngredients.ReadOnly = true;
             dgvIngredients.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Control;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(214, 192, 179);
-            dataGridViewCellStyle5.SelectionForeColor = Color.White;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            dgvIngredients.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = SystemColors.Control;
+            dataGridViewCellStyle10.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle10.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = Color.FromArgb(214, 192, 179);
+            dataGridViewCellStyle10.SelectionForeColor = Color.White;
+            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
+            dgvIngredients.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
             dgvIngredients.RowHeadersVisible = false;
             dgvIngredients.RowHeadersWidth = 51;
             dgvIngredients.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -419,8 +463,8 @@
             // ingredient
             // 
             ingredient.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            ingredient.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            ingredient.DefaultCellStyle = dataGridViewCellStyle8;
             ingredient.FillWeight = 115.0222F;
             ingredient.HeaderText = "Ingredients Summary";
             ingredient.MinimumWidth = 270;
@@ -465,21 +509,6 @@
             label9.TabIndex = 71;
             label9.Text = "ADD MENU ITEM";
             // 
-            // btnRemoveIngredients
-            // 
-            btnRemoveIngredients.BackColor = Color.FromArgb(244, 67, 54);
-            btnRemoveIngredients.FlatAppearance.BorderSize = 0;
-            btnRemoveIngredients.FlatStyle = FlatStyle.Flat;
-            btnRemoveIngredients.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnRemoveIngredients.ForeColor = Color.White;
-            btnRemoveIngredients.Location = new Point(193, 28);
-            btnRemoveIngredients.Name = "btnRemoveIngredients";
-            btnRemoveIngredients.Size = new Size(154, 30);
-            btnRemoveIngredients.TabIndex = 82;
-            btnRemoveIngredients.Text = "REMOVE INGREDIENTS";
-            btnRemoveIngredients.UseVisualStyleBackColor = false;
-            btnRemoveIngredients.Click += btnRemoveIngredients_Click;
-            // 
             // AddProduct
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -494,7 +523,6 @@
             Controls.Add(checkBox1);
             Controls.Add(txtPrice);
             Controls.Add(cbIsActive);
-            Controls.Add(btnUploadImage);
             Controls.Add(pbImage);
             Controls.Add(label7);
             Controls.Add(label6);
@@ -518,6 +546,9 @@
             ((System.ComponentModel.ISupportInitialize)pbImage).EndInit();
             pnlHeader.ResumeLayout(false);
             pnlHeader.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbKnowMore).EndInit();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvIngredients).EndInit();
@@ -556,5 +587,7 @@
         private DataGridView dgvIngredients;
         private DataGridViewTextBoxColumn ingredient;
         private Button btnRemoveIngredients;
+        private CheckBox cbUseSystemBackground;
+        private PictureBox pbKnowMore;
     }
 }

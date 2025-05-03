@@ -121,6 +121,7 @@
             txtInput.PlaceholderText = "Type to search...";
             txtInput.Size = new Size(334, 31);
             txtInput.TabIndex = 0;
+            txtInput.TextChanged += txtInput_TextChanged;
             // 
             // pnlHeader
             // 

@@ -15,6 +15,8 @@ namespace client.Forms.ProductManagement
 {
     public partial class SearchIngredients : Form
     {
+        private System.Windows.Forms.Timer inputDelayTimer = new System.Windows.Forms.Timer();
+
         private Form _parentForm;
         private string? _selectedItemName;
 
@@ -28,6 +30,34 @@ namespace client.Forms.ProductManagement
         private void SearchIngredients_Load(object sender, EventArgs e)
         {
             DisplayIngredientsInListbox();
+            inputDelayTimer = new System.Windows.Forms.Timer();
+            inputDelayTimer.Interval = 300;
+            inputDelayTimer.Tick += InputDelayTimer_Tick;
+        }
+
+        private void InputDelayTimer_Tick(object? sender, EventArgs e)
+        {
+            inputDelayTimer.Stop();
+            ApplyTextFilter();
+        }
+
+        private void ApplyTextFilter()
+        {
+            string query = txtInput.Text.ToLower();
+
+            var filteredItems = CurrentInventoryItem.AllItems
+                .Where(ut => !string.IsNullOrEmpty(ut.ItemName) && ut.ItemName.ToLower().Contains(query))
+                .ToList();
+
+            if (filteredItems.Count == 0)
+            {
+                Logger.Write("ITEMS_WARNING", "No matching items found.");
+            }
+
+            lbIngredients.DisplayMember = "ItemName";
+            lbIngredients.ValueMember = "ItemId";
+            lbIngredients.DataSource = filteredItems;
+            lbIngredients.ClearSelected();
         }
 
         private void DisplayIngredientsInListbox()
@@ -112,6 +142,12 @@ namespace client.Forms.ProductManagement
             {
                 MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void txtInput_TextChanged(object sender, EventArgs e)
+        {
+            inputDelayTimer.Stop();
+            inputDelayTimer.Start();
         }
     }
 }

@@ -19,12 +19,11 @@ namespace client.Forms.ProductManagement
     {
         private readonly UnitController _unitController = new UnitController();
 
-        private readonly AddProduct _parentForm;
+        private readonly Form _parentForm;
 
-        public NewUnit(AddProduct parent)
+        public NewUnit(Form parent)
         {
             InitializeComponent();
-
             _parentForm = parent;
         }
 
@@ -82,13 +81,19 @@ namespace client.Forms.ProductManagement
             if (response)
             {
                 HideLoading();
-                //MessageBox.Show($"Unit '{unitName}' has been created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Dispose();
 
                 bool getUnits = await _unitController.Get();
                 if (getUnits)
                 {
-                    _parentForm.GetUnit();
+                    if(_parentForm is AddProduct addproduct)
+                    {
+                        addproduct.GetUnit();
+                    }
+                    else if(_parentForm is AddIngredientToRecipe addIngredientToRecipe)
+                    {
+                        addIngredientToRecipe.GetInventoryUnitMeasure();
+                    }
                 }
             }
             else

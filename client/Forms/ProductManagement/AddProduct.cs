@@ -534,12 +534,12 @@ namespace client.Forms.ProductManagement
 
         private void pbImage_Click(object sender, EventArgs e)
         {
-            PickImage(3);
+            PickImage(4);
         }
 
         private void btnUploadImage_Click(object sender, EventArgs e)
         {
-            PickImage(3);
+            PickImage(4);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

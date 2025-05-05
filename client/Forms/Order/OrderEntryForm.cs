@@ -76,29 +76,35 @@ namespace client.Forms.Order
         decimal lessDiscount = 0; // PWD/Senior discount usually 20%
         private decimal _discountAmount = 0;
         private decimal _totalDue = 0;
+        decimal _eligibleSubtotal = 0;
         private void UpdateDiscount(decimal updatedDiscount)
         {
+            Logger.Write("DISCOUNT_DEBUG", $"Updated Discount: {updatedDiscount}");
+
+            const decimal VAT_RATE = 0.12m;
+
             if (AppliedDiscount.DiscountType.ToString() == "Percentage")
             {
-                decimal vatableSales = 0m;
-                decimal vatAmount = 0m;
-                decimal discountAmount = 0m;
+                // Extract vatable amount (inclusive of VAT)
+                decimal vatableSales = _eligibleSubtotal / (1 + VAT_RATE); // remove VAT
+                decimal discountAmount = vatableSales * updatedDiscount;
 
-                vatableSales = _subTotal / 1.12m;
-                vatAmount = _subTotal - vatableSales;
-                discountAmount = vatableSales * updatedDiscount;
-                _totalDue = vatableSales - discountAmount;
+                // Non-discountable items still include VAT
+                decimal totalDue = (_subTotal - discountAmount); // subtract discount only
 
+                // Store values
                 saleWoVAT = vatableSales;
-                VATAmount = vatAmount;
+                VATAmount = 0m; // VAT is not charged for PWD/Senior
                 lessDiscount = discountAmount;
                 _discountAmount = discountAmount;
+                _totalDue = totalDue;
 
-                lblSubTotal.Text = _subTotal.ToString("F2");
-                lblTotalDue.Text = _totalDue.ToString("F2");
-                lblVatable.Text = vatableSales.ToString("F2");
-                lblVatAmount.Text = vatAmount.ToString("F2");
-                lblDiscount.Text = discountAmount.ToString("F2");
+                // Update UI labels
+                lblSubTotal.Text = _subTotal.ToString("F2");        // All items
+                lblTotal.Text = _totalDue.ToString("F2");           // With discount
+                lblVatable.Text = "0.00";                           // No vatable sales for PWD/Senior
+                lblVatAmount.Text = "0.00";                         // VAT exempt
+                lblDiscount.Text = discountAmount.ToString("F2");   // Show 20% discount
             }
         }
 
@@ -114,7 +120,7 @@ namespace client.Forms.Order
             lessDiscount = saleWoVAT * _discountAmount;
 
             lblSubTotal.Text = _subTotal.ToString("F2");
-            lblTotalDue.Text = _subTotal.ToString("F2");
+            lblTotal.Text = _subTotal.ToString("F2");
             lblVatable.Text = vatableSales.ToString("F2");
             lblVatAmount.Text = VATAmount.ToString("F2");
             lblDiscount.Text = _discountAmount.ToString("F2");
@@ -670,7 +676,9 @@ namespace client.Forms.Order
                     productId = product.productId,
                     productName = product.productName,
                     productPrice = product.productPrice,
-                    Quantity = 1
+                    Quantity = 1,
+                    isVatable = product.isVatable,
+                    isDiscountable = product.isDiscountable
                 };
 
                 CurrentCart.AddItem(cartItem);
@@ -1056,14 +1064,44 @@ namespace client.Forms.Order
         {
             if (IsCartEmpty())
             {
-                MessageBox.Show("The cart is empty, Please add item to the cart first.",
+                MessageBox.Show("The cart is empty. Please add items to the cart first.",
                     "Cart Empty",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            //new ApplyDiscount().ShowDialog(); // The last discount calculation is not correct.
-            new DiscountForm(_subTotal).ShowDialog();
+            if (IsCartEmpty())
+            {
+                MessageBox.Show("The cart is empty. Please add items to the cart first.",
+                    "Cart Empty",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var eligibleItems = CurrentCart.Items
+                .Where(item =>
+                    item != null &&
+                    item.isVatable == 1 &&
+                    item.isDiscountable == 1)
+                .ToList();
+
+            if (eligibleItems.Count == 0)
+            {
+                MessageBox.Show("No items eligible for discount in the cart.",
+                    "No Discountable Items",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            decimal nonEligibleTotal = CurrentCart.Items
+                .Where(item =>
+                    item == null || item.isVatable != 1 || item.isDiscountable != 1)
+                .Sum(item => item.TotalPrice);
+
+            decimal eligibleSubtotal = _subTotal - nonEligibleTotal;
+            _eligibleSubtotal = eligibleSubtotal;
+
+            new DiscountForm(eligibleSubtotal).ShowDialog();
         }
 
         private void txtSearchInput_TextChanged(object sender, EventArgs e)
@@ -1270,7 +1308,7 @@ namespace client.Forms.Order
             lblOrderNo.Text = string.Empty;
             lblTransactionNo.Text = string.Empty;
             lblSubTotal.Text = "0.00";
-            lblTotalDue.Text = "0.00";
+            lblTotal.Text = "0.00";
             lblVatable.Text = "0.00";
             lblVatAmount.Text = "0.00";
             lblDiscount.Text = "0.00";

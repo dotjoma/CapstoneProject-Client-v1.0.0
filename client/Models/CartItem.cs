@@ -12,6 +12,8 @@ namespace client.Models
         public string? productName { get; set; }
         public decimal productPrice { get; set; }
         public int Quantity { get; set; }
+        public int isVatable { get; set; }
+        public int isDiscountable { get; set; }
         public decimal TotalPrice => productPrice * Quantity;
     }
 }

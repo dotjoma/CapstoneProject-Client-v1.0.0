@@ -1,4 +1,5 @@
-﻿using System;
+﻿using client.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,6 +44,8 @@ namespace client.Models
 
         public static void SetDiscountDetails(string name, DiscountTypeEnum type, decimal value, decimal subtotal)
         {
+            Logger.Write("DISCOUNT", $"Setting discount: {name}, Type: {type}, Value: {value}, Subtotal: {subtotal}");
+
             if (value < 0)
             {
                 MessageBox.Show("Discount value must be non-negative.", "Invalid Discount", MessageBoxButtons.OK, MessageBoxIcon.Warning);

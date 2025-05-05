@@ -60,9 +60,6 @@ namespace client.Forms.Order
                     CurrentDiscount.SetCurrentDiscount(null);
                     this.Dispose();
                     break;
-                case Keys.Enter:
-                    btnConfirmPayment.PerformClick();
-                    break;
             }
         }
 

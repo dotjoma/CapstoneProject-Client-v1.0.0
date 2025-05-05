@@ -77,7 +77,7 @@ namespace client.Forms.ProductManagement
             toolTip.InitialDelay = 100;
             toolTip.ReshowDelay = 100;
             toolTip.ShowAlways = true;
-            toolTip.SetToolTip(pbKnowMore, "We'll erase the background of your uploaded menu and apply the system's default background style.");
+            toolTip.SetToolTip(pbKnowMore, "Auto-set the background to white. This process may take 15 seconds or more to complete.");
         }
 
         private void LoadProductDetails(Product product)
@@ -167,7 +167,32 @@ namespace client.Forms.ProductManagement
                 }
             }
 
+            cbIsVatable.Checked = product.isVatable > 0;
             cbIsActive.Checked = product.isActive > 0;
+            cbIsDiscountable.Checked = product.isDiscountable > 0;
+
+            try
+            {
+                dgvIngredients.Rows.Clear();
+
+                var selectedProduct = CurrentProduct.GetProductById(_selectedId);
+                if (selectedProduct == null || selectedProduct.Ingredients == null || selectedProduct.Ingredients.Count == 0)
+                    return;
+
+                foreach (var ingredient in selectedProduct.Ingredients)
+                {
+                    var item = CurrentInventoryItem.GetItemById(ingredient.InventoryItemId);
+                    var name = item?.ItemName ?? "Unknown";
+
+                    dgvIngredients.Rows.Add($"{name} {ingredient.Quantity}{ingredient.MeasureSymbol}");
+                }
+
+                dgvIngredients.ClearSelection();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading ingredients: " + ex.Message);
+            }
         }
 
         private Image? ConvertBase64ToImage(string? base64String)
@@ -221,9 +246,9 @@ namespace client.Forms.ProductManagement
 
         private void PickImage(int modelSelection)
         {
-            if(cbUseSystemBackground.Checked)
+            if (cbUseSystemBackground.Checked)
             {
-                
+
                 string selectedModel = modelSelection switch
                 {
                     1 => "u2net",               // High quality but slow
@@ -337,7 +362,8 @@ namespace client.Forms.ProductManagement
                                                 if (!cts.IsCancellationRequested)
                                                 {
                                                     proc.Kill();
-                                                    processingForm.Invoke(() => {
+                                                    processingForm.Invoke(() =>
+                                                    {
                                                         MessageBox.Show("Process timed out after 5 minutes");
                                                     });
                                                 }
@@ -353,7 +379,8 @@ namespace client.Forms.ProductManagement
                                                 Logger.Write("REMOVE_BG_DEBUG", $"STDERR: {stdErr}");
 
                                             processCompleted = true;
-                                            processingForm.Invoke(() => {
+                                            processingForm.Invoke(() =>
+                                            {
                                                 processingForm.DialogResult = proc.ExitCode == 0 ? DialogResult.OK : DialogResult.Abort;
                                             });
                                         }
@@ -361,13 +388,15 @@ namespace client.Forms.ProductManagement
                                     catch (Exception ex)
                                     {
                                         Logger.Write("REMOVE_BG_DEBUG", $"[PROCESS ERROR] {ex}");
-                                        processingForm.Invoke(() => {
+                                        processingForm.Invoke(() =>
+                                        {
                                             MessageBox.Show($"Process error: {ex.Message}");
                                         });
                                     }
                                 }, cts.Token);
 
-                                cancelButton.Click += (s, e) => {
+                                cancelButton.Click += (s, e) =>
+                                {
                                     if (!processCompleted)
                                     {
                                         cts.Cancel();
@@ -573,6 +602,8 @@ namespace client.Forms.ProductManagement
 
             string price = txtPrice.Text.Trim();
             int isActive = (cbIsActive.CheckState == CheckState.Checked) ? 1 : 0;
+            int isDiscountable = (cbIsDiscountable.CheckState == CheckState.Checked) ? 1 : 0;
+            int isVatable = (cbIsVatable.CheckState == CheckState.Checked) ? 1 : 0;
 
             if (!ValidateFormInputs(out int categoryId, out int subCategoryId, out int unitId))
             {
@@ -593,12 +624,12 @@ namespace client.Forms.ProductManagement
             {
                 if (_selectedId > 0)
                 {
-                    bool response = await _productController.Update(_selectedId, name, image, price, categoryId, subCategoryId, unitId, isActive);
+                    bool response = await _productController.Update(_selectedId, name, image, price, categoryId, subCategoryId, unitId, isVatable, isActive, isDiscountable);
                     HandleResponse(response);
                 }
                 else
                 {
-                    bool response = await _productController.Create(name, image, price, categoryId, subCategoryId, unitId, isActive, RecipeBuilder.SelectedIngredients);
+                    bool response = await _productController.Create(name, image, price, categoryId, subCategoryId, unitId, isVatable, isActive, isDiscountable, RecipeBuilder.SelectedIngredients);
                     HandleResponse(response);
                 }
             }
@@ -1105,7 +1136,7 @@ namespace client.Forms.ProductManagement
 
         private void btnManageIngredients_Click(object sender, EventArgs e)
         {
-            using (var addtoingredient = new AddIngredientToRecipe(this))
+            using (var addtoingredient = new AddIngredientToRecipe(_selectedId, this))
             {
                 addtoingredient.StartPosition = FormStartPosition.Manual;
                 addtoingredient.StartPosition = FormStartPosition.CenterParent;
@@ -1137,9 +1168,9 @@ namespace client.Forms.ProductManagement
 
         private void btnRemoveIngredients_Click(object sender, EventArgs e)
         {
-            if(dgvIngredients.Rows.Count > 0 || RecipeBuilder.SelectedIngredients.Count > 0)
+            if (dgvIngredients.Rows.Count > 0 || RecipeBuilder.SelectedIngredients.Count > 0)
             {
-                if(MessageBox.Show("Are you sure you want to remove all ingredients?", "Remove Ingredients", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                if (MessageBox.Show("Are you sure you want to remove all ingredients?", "Remove Ingredients", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     dgvIngredients.Rows.Clear();
                     RecipeBuilder.SelectedIngredients.Clear();
@@ -1149,6 +1180,11 @@ namespace client.Forms.ProductManagement
             {
                 MessageBox.Show("No ingredients to remove.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private void cbIsActive_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

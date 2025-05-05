@@ -167,7 +167,9 @@ namespace client.Controllers
             int categoryId,
             int subcategoryId,
             int unitId,
+            int isVatable,
             int isActive,
+            int isDiscountable,
             Dictionary<int, (InventoryItem item, decimal quantity, string? measureSymbol)> selectedIngredients)
         {
             var ingredientsList = selectedIngredients.Select(entry => new
@@ -190,7 +192,9 @@ namespace client.Controllers
                     { "catId", categoryId.ToString()},
                     { "scId", subcategoryId.ToString() },
                     { "unitId", unitId.ToString() },
+                    { "isVatable", isVatable.ToString() },
                     { "isActive", isActive.ToString() },
+                    { "isDiscountable", isDiscountable.ToString() },
                     { "ingredients", ingredientsJson }
                 }
             });
@@ -247,7 +251,7 @@ namespace client.Controllers
         }
 
         public async Task<bool> Update(int productId, string name, string image, string price,
-            int categoryId, int subcategoryId, int unitId, int isActive)
+            int categoryId, int subcategoryId, int unitId, int isVatable, int isActive, int isDiscountable)
         {
             var originalProduct = CurrentProduct.GetProductById(productId);
             Logger.Write("PRODUCT_AUDIT_DEBUG", $"productImage: {originalProduct?.productImage} image: {image}");
@@ -264,7 +268,9 @@ namespace client.Controllers
                     { "catId", categoryId.ToString() },
                     { "scId", subcategoryId.ToString() },
                     { "unitId", unitId.ToString() },
-                    { "isActive", isActive.ToString() }
+                    { "isVatable", isVatable.ToString() },
+                    { "isActive", isActive.ToString() },
+                    { "isDiscountable", isDiscountable.ToString() }
                 }
             });
 
@@ -321,6 +327,18 @@ namespace client.Controllers
                 {
                     oldValues.Add("Status", originalProduct?.isActive == 1 ? "Active" : "Inactive");
                     changes.Add("Status", isActive == 1 ? "Active" : "Inactive");
+                }
+
+                if (originalProduct?.isVatable != isVatable)
+                {
+                    oldValues.Add("Vatable", originalProduct!.isVatable == 1 ? "Yes" : "No");
+                    changes.Add("Vatable", isVatable == 1 ? "Yes" : "No");
+                }
+
+                if (originalProduct?.isDiscountable != isDiscountable)
+                {
+                    oldValues.Add("Discountable", originalProduct!.isDiscountable == 1 ? "Yes" : "No");
+                    changes.Add("Discountable", isDiscountable == 1 ? "Yes" : "No");
                 }
 
                 if (changes.Any())

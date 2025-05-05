@@ -15,8 +15,9 @@ namespace client.Models
         public int unitId { get; set; }
         public decimal productPrice { get; set; }
         public string? productImage { get; set; }
-        public int isActive { get; set; }
         public int isVatable { get; set; }
+        public int isActive { get; set; }
+        public int isDiscountable { get; set; }
         public int Quantity { get; set; }
         public Image? ProductImageObject { get; set; }
         public List<ProductIngredient> Ingredients { get; set; } = new();

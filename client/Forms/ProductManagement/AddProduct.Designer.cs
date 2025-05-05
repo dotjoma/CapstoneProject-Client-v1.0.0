@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddProduct));
             pbImage = new PictureBox();
             label7 = new Label();
@@ -49,13 +49,14 @@
             btnUploadImage = new Button();
             cbIsActive = new CheckBox();
             txtPrice = new TextBox();
-            checkBox1 = new CheckBox();
+            cbIsDiscountable = new CheckBox();
             pnlHeader = new Panel();
             lblTitle = new Label();
             lblHeader = new Label();
             label3 = new Label();
             label8 = new Label();
             panel2 = new Panel();
+            cbIsVatable = new CheckBox();
             pbKnowMore = new PictureBox();
             cbUseSystemBackground = new CheckBox();
             panel3 = new Panel();
@@ -76,7 +77,7 @@
             // pbImage
             // 
             pbImage.BorderStyle = BorderStyle.FixedSingle;
-            pbImage.Location = new Point(436, 94);
+            pbImage.Location = new Point(436, 91);
             pbImage.Name = "pbImage";
             pbImage.Size = new Size(180, 140);
             pbImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -89,7 +90,7 @@
             label7.AutoSize = true;
             label7.BackColor = Color.White;
             label7.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
-            label7.Location = new Point(25, 181);
+            label7.Location = new Point(25, 178);
             label7.Name = "label7";
             label7.Size = new Size(116, 21);
             label7.TabIndex = 24;
@@ -100,7 +101,7 @@
             label6.AutoSize = true;
             label6.BackColor = Color.White;
             label6.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
-            label6.Location = new Point(25, 139);
+            label6.Location = new Point(25, 136);
             label6.Name = "label6";
             label6.Size = new Size(82, 21);
             label6.TabIndex = 23;
@@ -111,7 +112,7 @@
             label5.AutoSize = true;
             label5.BackColor = Color.White;
             label5.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
-            label5.Location = new Point(25, 225);
+            label5.Location = new Point(25, 222);
             label5.Name = "label5";
             label5.Size = new Size(44, 21);
             label5.TabIndex = 22;
@@ -122,7 +123,7 @@
             cboSubCategory.DropDownStyle = ComboBoxStyle.DropDownList;
             cboSubCategory.Font = new Font("Segoe UI", 12F);
             cboSubCategory.FormattingEnabled = true;
-            cboSubCategory.Location = new Point(171, 177);
+            cboSubCategory.Location = new Point(171, 174);
             cboSubCategory.Name = "cboSubCategory";
             cboSubCategory.Size = new Size(242, 29);
             cboSubCategory.TabIndex = 13;
@@ -134,7 +135,7 @@
             cboCategory.DropDownStyle = ComboBoxStyle.DropDownList;
             cboCategory.Font = new Font("Segoe UI", 12F);
             cboCategory.FormattingEnabled = true;
-            cboCategory.Location = new Point(171, 136);
+            cboCategory.Location = new Point(171, 133);
             cboCategory.Name = "cboCategory";
             cboCategory.Size = new Size(242, 29);
             cboCategory.TabIndex = 14;
@@ -145,7 +146,7 @@
             txtName.BackColor = Color.FromArgb(232, 232, 232);
             txtName.BorderStyle = BorderStyle.FixedSingle;
             txtName.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtName.Location = new Point(171, 94);
+            txtName.Location = new Point(171, 91);
             txtName.Name = "txtName";
             txtName.PlaceholderText = "Enter menu name";
             txtName.Size = new Size(242, 33);
@@ -157,7 +158,7 @@
             cboUnit.DropDownStyle = ComboBoxStyle.DropDownList;
             cboUnit.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             cboUnit.FormattingEnabled = true;
-            cboUnit.Location = new Point(171, 223);
+            cboUnit.Location = new Point(171, 220);
             cboUnit.Name = "cboUnit";
             cboUnit.Size = new Size(242, 29);
             cboUnit.TabIndex = 15;
@@ -168,7 +169,7 @@
             label4.AutoSize = true;
             label4.BackColor = Color.White;
             label4.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
-            label4.Location = new Point(25, 265);
+            label4.Location = new Point(25, 262);
             label4.Name = "label4";
             label4.Size = new Size(50, 21);
             label4.TabIndex = 17;
@@ -179,7 +180,7 @@
             label2.AutoSize = true;
             label2.BackColor = Color.White;
             label2.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(25, 99);
+            label2.Location = new Point(25, 96);
             label2.Name = "label2";
             label2.Size = new Size(103, 21);
             label2.TabIndex = 16;
@@ -195,7 +196,7 @@
             btnCancel.Font = new Font("Verdana", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnCancel.ForeColor = Color.White;
             btnCancel.ImageAlign = ContentAlignment.MiddleLeft;
-            btnCancel.Location = new Point(337, 557);
+            btnCancel.Location = new Point(337, 567);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(156, 37);
             btnCancel.TabIndex = 23;
@@ -216,7 +217,7 @@
             btnSave.Font = new Font("Verdana", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSave.ForeColor = Color.White;
             btnSave.ImageAlign = ContentAlignment.MiddleLeft;
-            btnSave.Location = new Point(499, 557);
+            btnSave.Location = new Point(499, 567);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(136, 37);
             btnSave.TabIndex = 22;
@@ -246,19 +247,20 @@
             cbIsActive.Checked = true;
             cbIsActive.CheckState = CheckState.Checked;
             cbIsActive.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            cbIsActive.Location = new Point(171, 307);
+            cbIsActive.Location = new Point(171, 296);
             cbIsActive.Name = "cbIsActive";
             cbIsActive.Size = new Size(79, 24);
             cbIsActive.TabIndex = 29;
             cbIsActive.Text = "isActive";
             cbIsActive.UseVisualStyleBackColor = false;
+            cbIsActive.CheckedChanged += cbIsActive_CheckedChanged;
             // 
             // txtPrice
             // 
             txtPrice.BackColor = Color.FromArgb(232, 232, 232);
             txtPrice.BorderStyle = BorderStyle.FixedSingle;
             txtPrice.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtPrice.Location = new Point(171, 261);
+            txtPrice.Location = new Point(171, 258);
             txtPrice.Name = "txtPrice";
             txtPrice.PlaceholderText = "0.00";
             txtPrice.Size = new Size(242, 33);
@@ -267,17 +269,17 @@
             txtPrice.TextAlign = HorizontalAlignment.Right;
             txtPrice.KeyPress += txtPrice_KeyPress;
             // 
-            // checkBox1
+            // cbIsDiscountable
             // 
-            checkBox1.AutoSize = true;
-            checkBox1.BackColor = Color.White;
-            checkBox1.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox1.Location = new Point(256, 307);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(115, 24);
-            checkBox1.TabIndex = 31;
-            checkBox1.Text = "Discountable";
-            checkBox1.UseVisualStyleBackColor = false;
+            cbIsDiscountable.AutoSize = true;
+            cbIsDiscountable.BackColor = Color.White;
+            cbIsDiscountable.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cbIsDiscountable.Location = new Point(276, 220);
+            cbIsDiscountable.Name = "cbIsDiscountable";
+            cbIsDiscountable.Size = new Size(125, 24);
+            cbIsDiscountable.TabIndex = 31;
+            cbIsDiscountable.Text = "isDiscountable";
+            cbIsDiscountable.UseVisualStyleBackColor = false;
             // 
             // pnlHeader
             // 
@@ -346,17 +348,31 @@
             // panel2
             // 
             panel2.BackColor = Color.White;
+            panel2.Controls.Add(cbIsVatable);
             panel2.Controls.Add(pbKnowMore);
             panel2.Controls.Add(cbUseSystemBackground);
             panel2.Controls.Add(btnUploadImage);
-            panel2.Location = new Point(12, 80);
+            panel2.Controls.Add(cbIsDiscountable);
+            panel2.Location = new Point(12, 76);
             panel2.Name = "panel2";
-            panel2.Size = new Size(623, 262);
+            panel2.Size = new Size(623, 279);
             panel2.TabIndex = 65;
+            // 
+            // cbIsVatable
+            // 
+            cbIsVatable.AutoSize = true;
+            cbIsVatable.BackColor = Color.White;
+            cbIsVatable.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cbIsVatable.Location = new Point(159, 250);
+            cbIsVatable.Name = "cbIsVatable";
+            cbIsVatable.Size = new Size(88, 24);
+            cbIsVatable.TabIndex = 84;
+            cbIsVatable.Text = "isVatable";
+            cbIsVatable.UseVisualStyleBackColor = false;
             // 
             // pbKnowMore
             // 
-            pbKnowMore.Image = Properties.Resources.question_mark_24;
+            pbKnowMore.Image = Properties.Resources.question_mark_24_black;
             pbKnowMore.Location = new Point(585, 160);
             pbKnowMore.Name = "pbKnowMore";
             pbKnowMore.Size = new Size(19, 17);
@@ -371,9 +387,9 @@
             cbUseSystemBackground.Font = new Font("Segoe UI", 8F);
             cbUseSystemBackground.Location = new Point(424, 160);
             cbUseSystemBackground.Name = "cbUseSystemBackground";
-            cbUseSystemBackground.Size = new Size(151, 17);
+            cbUseSystemBackground.Size = new Size(158, 17);
             cbUseSystemBackground.TabIndex = 32;
-            cbUseSystemBackground.Text = "Use default background";
+            cbUseSystemBackground.Text = "Auto change background";
             cbUseSystemBackground.UseVisualStyleBackColor = false;
             // 
             // panel3
@@ -383,7 +399,7 @@
             panel3.Controls.Add(dgvIngredients);
             panel3.Controls.Add(btnManageIngredients);
             panel3.Controls.Add(label1);
-            panel3.Location = new Point(12, 352);
+            panel3.Location = new Point(12, 361);
             panel3.Name = "panel3";
             panel3.Size = new Size(623, 200);
             panel3.TabIndex = 66;
@@ -409,34 +425,34 @@
             dgvIngredients.AllowUserToDeleteRows = false;
             dgvIngredients.AllowUserToResizeColumns = false;
             dgvIngredients.AllowUserToResizeRows = false;
-            dataGridViewCellStyle6.BackColor = Color.WhiteSmoke;
-            dataGridViewCellStyle6.ForeColor = Color.Black;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.MenuHighlight;
-            dataGridViewCellStyle6.SelectionForeColor = Color.Black;
-            dgvIngredients.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.BackColor = Color.WhiteSmoke;
+            dataGridViewCellStyle1.ForeColor = Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.MenuHighlight;
+            dataGridViewCellStyle1.SelectionForeColor = Color.Black;
+            dgvIngredients.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             dgvIngredients.Anchor = AnchorStyles.Top;
             dgvIngredients.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvIngredients.BackgroundColor = Color.White;
             dgvIngredients.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = Color.FromArgb(204, 204, 204);
-            dataGridViewCellStyle7.Font = new Font("Segoe UI Semibold", 8.5F, FontStyle.Bold);
-            dataGridViewCellStyle7.ForeColor = Color.Black;
-            dataGridViewCellStyle7.SelectionBackColor = Color.FromArgb(204, 204, 204);
-            dataGridViewCellStyle7.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
-            dgvIngredients.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(204, 204, 204);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI Semibold", 8.5F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(204, 204, 204);
+            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dgvIngredients.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvIngredients.ColumnHeadersHeight = 25;
             dgvIngredients.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvIngredients.Columns.AddRange(new DataGridViewColumn[] { ingredient });
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = Color.White;
-            dataGridViewCellStyle9.Font = new Font("Segoe UI", 8.5F);
-            dataGridViewCellStyle9.ForeColor = Color.Black;
-            dataGridViewCellStyle9.SelectionBackColor = SystemColors.MenuHighlight;
-            dataGridViewCellStyle9.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.False;
-            dgvIngredients.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = Color.White;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 8.5F);
+            dataGridViewCellStyle4.ForeColor = Color.Black;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.MenuHighlight;
+            dataGridViewCellStyle4.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dgvIngredients.DefaultCellStyle = dataGridViewCellStyle4;
             dgvIngredients.Enabled = false;
             dgvIngredients.EnableHeadersVisualStyles = false;
             dgvIngredients.GridColor = Color.White;
@@ -445,14 +461,14 @@
             dgvIngredients.Name = "dgvIngredients";
             dgvIngredients.ReadOnly = true;
             dgvIngredients.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = SystemColors.Control;
-            dataGridViewCellStyle10.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle10.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = Color.FromArgb(214, 192, 179);
-            dataGridViewCellStyle10.SelectionForeColor = Color.White;
-            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
-            dgvIngredients.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Control;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(214, 192, 179);
+            dataGridViewCellStyle5.SelectionForeColor = Color.White;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            dgvIngredients.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
             dgvIngredients.RowHeadersVisible = false;
             dgvIngredients.RowHeadersWidth = 51;
             dgvIngredients.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -463,8 +479,8 @@
             // ingredient
             // 
             ingredient.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            ingredient.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            ingredient.DefaultCellStyle = dataGridViewCellStyle3;
             ingredient.FillWeight = 115.0222F;
             ingredient.HeaderText = "Ingredients Summary";
             ingredient.MinimumWidth = 270;
@@ -514,13 +530,12 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(232, 232, 232);
-            ClientSize = new Size(647, 599);
+            ClientSize = new Size(647, 619);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
             Controls.Add(panel3);
             Controls.Add(label9);
             Controls.Add(pnlHeader);
-            Controls.Add(checkBox1);
             Controls.Add(txtPrice);
             Controls.Add(cbIsActive);
             Controls.Add(pbImage);
@@ -573,7 +588,7 @@
         private Button btnUploadImage;
         private CheckBox cbIsActive;
         private TextBox txtPrice;
-        private CheckBox checkBox1;
+        private CheckBox cbIsDiscountable;
         private Panel pnlHeader;
         private Label lblHeader;
         private Label label3;
@@ -589,5 +604,6 @@
         private Button btnRemoveIngredients;
         private CheckBox cbUseSystemBackground;
         private PictureBox pbKnowMore;
+        private CheckBox cbIsVatable;
     }
 }

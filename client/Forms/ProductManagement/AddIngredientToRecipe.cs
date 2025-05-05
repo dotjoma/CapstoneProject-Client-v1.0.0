@@ -18,13 +18,14 @@ namespace client.Forms.ProductManagement
     public partial class AddIngredientToRecipe : Form
     {
         private System.Threading.Timer? _searchTimer;
-        private string _lastSearchText = string.Empty;
         private Form _parentForm;
+        private int _selectedId;
 
-        public AddIngredientToRecipe(Form parentForm)
+        public AddIngredientToRecipe(int selectedId, Form parentForm)
         {
             InitializeComponent();
             this.ShowInTaskbar = false;
+            _selectedId = selectedId;
             _parentForm = parentForm;
         }
 
@@ -37,30 +38,63 @@ namespace client.Forms.ProductManagement
 
         private void LoadRecipes()
         {
-            dgvIngredients.Rows.Clear();
-
-            if (RecipeBuilder.SelectedIngredients.Count == 0)
+            try
             {
-                //MessageBox.Show("No saved recipe ingredients found.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Logger.Write("ITEMS_WARNING", "No saved recipe ingredients found.");
-                return;
-            }
+                dgvIngredients.Rows.Clear();
 
-            foreach (var entry in RecipeBuilder.SelectedIngredients)
+                if (_selectedId > 0)
+                {
+                    var selectedProduct = CurrentProduct.GetProductById(_selectedId);
+                    if (selectedProduct?.Ingredients == null || selectedProduct.Ingredients.Count == 0)
+                        return;
+
+                    foreach (var ingredient in selectedProduct.Ingredients)
+                    {
+                        var item = CurrentInventoryItem.GetItemById(ingredient.InventoryItemId);
+                        var name = item?.ItemName ?? "Unknown";
+                        var measure = ingredient.MeasureSymbol;
+                        var quantity = ingredient.Quantity;
+
+                        dgvIngredients.Rows.Add(
+                            name,
+                            measure,
+                            quantity,
+                            Properties.Resources.trash_red_20
+                        );
+                    }
+                }
+                else
+                {
+                    if (RecipeBuilder.SelectedIngredients.Count == 0)
+                    {
+                        Logger.Write("ITEMS_WARNING", "No saved recipe ingredients found.");
+                        return;
+                    }
+
+                    foreach (var entry in RecipeBuilder.SelectedIngredients)
+                    {
+                        var item = entry.Value.item;
+                        var measure = entry.Value.measureSymbol;
+                        var quantity = entry.Value.quantity;
+
+                        dgvIngredients.Rows.Add(
+                            item.ItemName,
+                            measure,
+                            quantity,
+                            Properties.Resources.trash_red_20
+                        );
+                    }
+                }
+            }
+            catch (Exception ex)
             {
-                var item = entry.Value.item;
-                var measure = entry.Value.measureSymbol;
-                var quantity = entry.Value.quantity;
-
-                dgvIngredients.Rows.Add(
-                    item.ItemName,
-                    measure,
-                    quantity,
-                    Properties.Resources.trash_red_20
-                );
+                Logger.Write("LOAD_ERROR", ex.ToString());
+                MessageBox.Show("Error loading ingredients: " + ex.Message);
             }
-
-            dgvIngredients.ClearSelection();
+            finally
+            {
+                dgvIngredients.ClearSelection();
+            }
         }
 
         public void GetInventoryItems()

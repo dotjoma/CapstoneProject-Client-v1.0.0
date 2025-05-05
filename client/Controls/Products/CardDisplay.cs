@@ -175,9 +175,10 @@ namespace client.Controls.Products
                     product.ProductImageObject = ConvertBase64ToImage(product.productImage);
                 }
 
-                //MessageBox.Show($"Adding {product.productName} to cart", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 OrderEntryForm.Instance.AddCartItem(product);
+
+                Logger.Write("PRODUCT_DISPLAY_DEBUG", $"{product.productId} {product.productName} " +
+                    $"{product.productPrice} Vatable?:{product.isVatable} Discountable?:{product.isDiscountable}");
             }
             else
             {

@@ -45,7 +45,7 @@
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.Location = new Point(18, 42);
             label1.Name = "label1";
-            label1.Size = new Size(64, 28);
+            label1.Size = new Size(52, 21);
             label1.TabIndex = 0;
             label1.Text = "TYPE:";
             // 
@@ -58,7 +58,7 @@
             cboType.FormattingEnabled = true;
             cboType.Location = new Point(155, 39);
             cboType.Name = "cboType";
-            cboType.Size = new Size(264, 36);
+            cboType.Size = new Size(264, 29);
             cboType.TabIndex = 1;
             cboType.SelectedIndexChanged += cboType_SelectedIndexChanged;
             // 
@@ -68,7 +68,7 @@
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.Location = new Point(18, 83);
             label2.Name = "label2";
-            label2.Size = new Size(77, 28);
+            label2.Size = new Size(62, 21);
             label2.TabIndex = 2;
             label2.Text = "NAME:";
             // 
@@ -79,7 +79,8 @@
             txtName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtName.Location = new Point(155, 83);
             txtName.Name = "txtName";
-            txtName.Size = new Size(264, 34);
+            txtName.PlaceholderText = "Enter name";
+            txtName.Size = new Size(264, 29);
             txtName.TabIndex = 3;
             // 
             // txtIdNumber
@@ -89,7 +90,8 @@
             txtIdNumber.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtIdNumber.Location = new Point(155, 124);
             txtIdNumber.Name = "txtIdNumber";
-            txtIdNumber.Size = new Size(264, 34);
+            txtIdNumber.PlaceholderText = "Enter ID number";
+            txtIdNumber.Size = new Size(264, 29);
             txtIdNumber.TabIndex = 5;
             // 
             // label3
@@ -98,7 +100,7 @@
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label3.Location = new Point(18, 124);
             label3.Name = "label3";
-            label3.Size = new Size(130, 28);
+            label3.Size = new Size(104, 21);
             label3.TabIndex = 4;
             label3.Text = "ID NUMBER:";
             // 
@@ -124,7 +126,7 @@
             btnConfirmPayment.Name = "btnConfirmPayment";
             btnConfirmPayment.Size = new Size(437, 37);
             btnConfirmPayment.TabIndex = 1;
-            btnConfirmPayment.Text = "SAVE - [ENTER]";
+            btnConfirmPayment.Text = "Proceed";
             btnConfirmPayment.UseVisualStyleBackColor = false;
             btnConfirmPayment.Click += btnConfirmPayment_Click;
             btnConfirmPayment.MouseEnter += btnConfirmPayment_MouseEnter;
@@ -132,7 +134,7 @@
             // 
             // DiscountForm
             // 
-            AutoScaleDimensions = new SizeF(10F, 18F);
+            AutoScaleDimensions = new SizeF(8F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(437, 237);

@@ -58,9 +58,6 @@
             toolTip1 = new ToolTip(components);
             panel3 = new Panel();
             dgvProducts = new DataGridView();
-            cmsOptions = new ContextMenuStrip(components);
-            editToolStripMenuItem = new ToolStripMenuItem();
-            deleteToolStripMenuItem = new ToolStripMenuItem();
             id = new DataGridViewTextBoxColumn();
             productCategory = new DataGridViewTextBoxColumn();
             productSubcategory = new DataGridViewTextBoxColumn();
@@ -69,6 +66,9 @@
             productPrice = new DataGridViewTextBoxColumn();
             productStatus = new DataGridViewImageColumn();
             actions = new DataGridViewImageColumn();
+            cmsOptions = new ContextMenuStrip(components);
+            editToolStripMenuItem = new ToolStripMenuItem();
+            deleteToolStripMenuItem = new ToolStripMenuItem();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)btnRefresh).BeginInit();
@@ -413,27 +413,6 @@
             dgvProducts.CellContentClick += dgvProducts_CellContentClick_1;
             dgvProducts.CellMouseClick += dgvProducts_CellMouseClick;
             // 
-            // cmsOptions
-            // 
-            cmsOptions.ImageScalingSize = new Size(20, 20);
-            cmsOptions.Items.AddRange(new ToolStripItem[] { editToolStripMenuItem, deleteToolStripMenuItem });
-            cmsOptions.Name = "cmsOptions";
-            cmsOptions.Size = new Size(108, 48);
-            // 
-            // editToolStripMenuItem
-            // 
-            editToolStripMenuItem.Name = "editToolStripMenuItem";
-            editToolStripMenuItem.Size = new Size(107, 22);
-            editToolStripMenuItem.Text = "Edit";
-            editToolStripMenuItem.Click += editToolStripMenuItem_Click;
-            // 
-            // deleteToolStripMenuItem
-            // 
-            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(107, 22);
-            deleteToolStripMenuItem.Text = "Delete";
-            deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
-            // 
             // id
             // 
             id.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
@@ -522,6 +501,29 @@
             actions.Resizable = DataGridViewTriState.True;
             actions.SortMode = DataGridViewColumnSortMode.Automatic;
             actions.Width = 60;
+            // 
+            // cmsOptions
+            // 
+            cmsOptions.ImageScalingSize = new Size(20, 20);
+            cmsOptions.Items.AddRange(new ToolStripItem[] { editToolStripMenuItem, deleteToolStripMenuItem });
+            cmsOptions.Name = "cmsOptions";
+            cmsOptions.Size = new Size(185, 78);
+            // 
+            // editToolStripMenuItem
+            // 
+            editToolStripMenuItem.Image = Properties.Resources.Edit;
+            editToolStripMenuItem.Name = "editToolStripMenuItem";
+            editToolStripMenuItem.Size = new Size(184, 26);
+            editToolStripMenuItem.Text = "Edit";
+            editToolStripMenuItem.Click += editToolStripMenuItem_Click;
+            // 
+            // deleteToolStripMenuItem
+            // 
+            deleteToolStripMenuItem.Image = Properties.Resources.Delete;
+            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            deleteToolStripMenuItem.Size = new Size(184, 26);
+            deleteToolStripMenuItem.Text = "Delete";
+            deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
             // ProductHome
             // 

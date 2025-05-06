@@ -76,40 +76,45 @@ namespace client.Forms.Order
         decimal lessDiscount = 0; // PWD/Senior discount usually 20%
         private decimal _discountAmount = 0;
         private decimal _totalDue = 0;
-        decimal _eligibleSubtotal = 0;
+
         private void UpdateDiscount(decimal updatedDiscount)
         {
             Logger.Write("DISCOUNT_DEBUG", $"Updated Discount: {updatedDiscount}");
 
             const decimal VAT_RATE = 0.12m;
 
-            if (AppliedDiscount.DiscountType.ToString() == "Percentage")
-            {
-                // Extract vatable amount (inclusive of VAT)
-                decimal vatableSales = _eligibleSubtotal / (1 + VAT_RATE); // remove VAT
-                decimal discountAmount = vatableSales * updatedDiscount;
+            var vatableItems = CurrentCart.Items.Where(item => item != null && item.isVatable == 1).ToList();
+            var nonVatableItems = CurrentCart.Items.Where(item => item == null || item.isVatable != 1).ToList();
 
-                // Non-discountable items still include VAT
-                decimal totalDue = (_subTotal - discountAmount); // subtract discount only
+            decimal vatableGrossTotal = vatableItems.Sum(item => item.TotalPrice);
+            decimal nonVatableTotal = nonVatableItems.Sum(item => item.TotalPrice);
+            decimal vatableExemptSubtotal = vatableGrossTotal / (1 + VAT_RATE);
+            decimal discountAmount = vatableExemptSubtotal * updatedDiscount;
+            decimal totalDue = (vatableExemptSubtotal - discountAmount) + nonVatableTotal;
 
-                // Store values
-                saleWoVAT = vatableSales;
-                VATAmount = 0m; // VAT is not charged for PWD/Senior
-                lessDiscount = discountAmount;
-                _discountAmount = discountAmount;
-                _totalDue = totalDue;
+            saleWoVAT = vatableExemptSubtotal + nonVatableTotal;
+            VATAmount = 0m;
+            lessDiscount = discountAmount;
+            _discountAmount = discountAmount;
+            _totalDue = totalDue;
 
-                // Update UI labels
-                lblSubTotal.Text = _subTotal.ToString("F2");        // All items
-                lblTotal.Text = _totalDue.ToString("F2");           // With discount
-                lblVatable.Text = "0.00";                           // No vatable sales for PWD/Senior
-                lblVatAmount.Text = "0.00";                         // VAT exempt
-                lblDiscount.Text = discountAmount.ToString("F2");   // Show 20% discount
-            }
+            lblSubTotal.Text = totalDue.ToString("F2");
+            lblTotal.Text = totalDue.ToString("F2");     
+            lblVatable.Text = "0.00";                                                
+            lblVatAmount.Text = "0.00";   
+            lblDiscount.Text = discountAmount.ToString("F2");
         }
 
         private void UpdateSubTotal()
         {
+            var vatableItems = CurrentCart.Items
+                .Where(item =>
+                    item != null &&
+                    item.isVatable == 1)
+                .ToList();
+
+            Logger.Write("SUBTOTAL_DEBUG", $"Vatable Items: {vatableItems}");
+
             decimal vatableSales = _subTotal / 1.12m;
             decimal vat = _subTotal - vatableSales;
             totalAmount = _subTotal;
@@ -1070,38 +1075,7 @@ namespace client.Forms.Order
                 return;
             }
 
-            if (IsCartEmpty())
-            {
-                MessageBox.Show("The cart is empty. Please add items to the cart first.",
-                    "Cart Empty",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            var eligibleItems = CurrentCart.Items
-                .Where(item =>
-                    item != null &&
-                    item.isVatable == 1 &&
-                    item.isDiscountable == 1)
-                .ToList();
-
-            if (eligibleItems.Count == 0)
-            {
-                MessageBox.Show("No items eligible for discount in the cart.",
-                    "No Discountable Items",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            decimal nonEligibleTotal = CurrentCart.Items
-                .Where(item =>
-                    item == null || item.isVatable != 1 || item.isDiscountable != 1)
-                .Sum(item => item.TotalPrice);
-
-            decimal eligibleSubtotal = _subTotal - nonEligibleTotal;
-            _eligibleSubtotal = eligibleSubtotal;
-
-            new DiscountForm(eligibleSubtotal).ShowDialog();
+            new DiscountForm(_subTotal).ShowDialog();
         }
 
         private void txtSearchInput_TextChanged(object sender, EventArgs e)

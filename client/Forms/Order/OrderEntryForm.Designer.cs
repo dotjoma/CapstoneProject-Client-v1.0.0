@@ -59,6 +59,7 @@
             lblTransactionNo = new Label();
             label3 = new Label();
             panel4 = new Panel();
+            btnPayment = new Button();
             panel13 = new Panel();
             lblSubTotal = new Label();
             lblTotal = new Label();
@@ -67,7 +68,6 @@
             label8 = new Label();
             label6 = new Label();
             label4 = new Label();
-            btnPayment = new Button();
             lblVatable = new Label();
             lblDiscount = new Label();
             label1 = new Label();
@@ -479,6 +479,24 @@
             panel4.Size = new Size(440, 282);
             panel4.TabIndex = 10;
             // 
+            // btnPayment
+            // 
+            btnPayment.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            btnPayment.BackColor = Color.White;
+            btnPayment.FlatAppearance.BorderColor = Color.Gray;
+            btnPayment.FlatAppearance.BorderSize = 2;
+            btnPayment.FlatStyle = FlatStyle.Flat;
+            btnPayment.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnPayment.ForeColor = Color.Black;
+            btnPayment.Location = new Point(7, 211);
+            btnPayment.Name = "btnPayment";
+            btnPayment.Size = new Size(426, 54);
+            btnPayment.TabIndex = 20;
+            btnPayment.TabStop = false;
+            btnPayment.Text = "Proceed [ENTER]";
+            btnPayment.UseVisualStyleBackColor = false;
+            btnPayment.Click += btnPayment_Click;
+            // 
             // panel13
             // 
             panel13.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -578,24 +596,6 @@
             label4.TabIndex = 21;
             label4.Text = "Discount";
             // 
-            // btnPayment
-            // 
-            btnPayment.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            btnPayment.BackColor = Color.White;
-            btnPayment.FlatAppearance.BorderColor = Color.Gray;
-            btnPayment.FlatAppearance.BorderSize = 2;
-            btnPayment.FlatStyle = FlatStyle.Flat;
-            btnPayment.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnPayment.ForeColor = Color.Black;
-            btnPayment.Location = new Point(8, 214);
-            btnPayment.Name = "btnPayment";
-            btnPayment.Size = new Size(424, 52);
-            btnPayment.TabIndex = 20;
-            btnPayment.TabStop = false;
-            btnPayment.Text = "Proceed [ENTER]";
-            btnPayment.UseVisualStyleBackColor = false;
-            btnPayment.Click += btnPayment_Click;
-            // 
             // lblVatable
             // 
             lblVatable.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -651,9 +651,9 @@
             btnHoldOrder.FlatAppearance.BorderSize = 2;
             btnHoldOrder.FlatStyle = FlatStyle.Flat;
             btnHoldOrder.ImageAlign = ContentAlignment.MiddleLeft;
-            btnHoldOrder.Location = new Point(876, 6);
+            btnHoldOrder.Location = new Point(876, 5);
             btnHoldOrder.Name = "btnHoldOrder";
-            btnHoldOrder.Size = new Size(115, 52);
+            btnHoldOrder.Size = new Size(117, 54);
             btnHoldOrder.TabIndex = 14;
             btnHoldOrder.TabStop = false;
             btnHoldOrder.Text = "Hold Order";
@@ -735,13 +735,15 @@
             btnPendingOrders.FlatAppearance.BorderColor = Color.Gray;
             btnPendingOrders.FlatAppearance.BorderSize = 2;
             btnPendingOrders.FlatStyle = FlatStyle.Flat;
+            btnPendingOrders.Image = Properties.Resources.icons8_purchase_order_24;
             btnPendingOrders.ImageAlign = ContentAlignment.MiddleLeft;
-            btnPendingOrders.Location = new Point(348, 8);
+            btnPendingOrders.Location = new Point(278, 6);
             btnPendingOrders.Name = "btnPendingOrders";
-            btnPendingOrders.Size = new Size(181, 50);
+            btnPendingOrders.Size = new Size(146, 54);
             btnPendingOrders.TabIndex = 15;
             btnPendingOrders.TabStop = false;
             btnPendingOrders.Text = "Pending Orders";
+            btnPendingOrders.TextAlign = ContentAlignment.MiddleRight;
             btnPendingOrders.UseVisualStyleBackColor = false;
             // 
             // panel8
@@ -783,7 +785,7 @@
             btnCancelTransaction.FlatAppearance.BorderColor = Color.Gray;
             btnCancelTransaction.FlatAppearance.BorderSize = 2;
             btnCancelTransaction.FlatStyle = FlatStyle.Flat;
-            btnCancelTransaction.ForeColor = Color.Red;
+            btnCancelTransaction.ForeColor = Color.Black;
             btnCancelTransaction.ImageAlign = ContentAlignment.MiddleLeft;
             btnCancelTransaction.Location = new Point(751, 5);
             btnCancelTransaction.Name = "btnCancelTransaction";
@@ -801,13 +803,15 @@
             btnApplyDiscount.FlatAppearance.BorderColor = Color.Gray;
             btnApplyDiscount.FlatAppearance.BorderSize = 2;
             btnApplyDiscount.FlatStyle = FlatStyle.Flat;
+            btnApplyDiscount.Image = Properties.Resources.icons8_discount_24__1_;
             btnApplyDiscount.ImageAlign = ContentAlignment.MiddleLeft;
-            btnApplyDiscount.Location = new Point(163, 6);
+            btnApplyDiscount.Location = new Point(127, 6);
             btnApplyDiscount.Name = "btnApplyDiscount";
-            btnApplyDiscount.Size = new Size(179, 54);
+            btnApplyDiscount.Size = new Size(145, 54);
             btnApplyDiscount.TabIndex = 3;
             btnApplyDiscount.TabStop = false;
             btnApplyDiscount.Text = "Apply Discount";
+            btnApplyDiscount.TextAlign = ContentAlignment.MiddleRight;
             btnApplyDiscount.UseVisualStyleBackColor = false;
             btnApplyDiscount.Click += btnApplyDiscount_Click;
             // 
@@ -818,13 +822,15 @@
             btnNewOrder.FlatAppearance.BorderColor = Color.Gray;
             btnNewOrder.FlatAppearance.BorderSize = 2;
             btnNewOrder.FlatStyle = FlatStyle.Flat;
+            btnNewOrder.Image = Properties.Resources.Add;
             btnNewOrder.ImageAlign = ContentAlignment.MiddleLeft;
             btnNewOrder.Location = new Point(6, 6);
             btnNewOrder.Name = "btnNewOrder";
-            btnNewOrder.Size = new Size(151, 54);
+            btnNewOrder.Size = new Size(115, 54);
             btnNewOrder.TabIndex = 2;
             btnNewOrder.TabStop = false;
             btnNewOrder.Text = "New Order";
+            btnNewOrder.TextAlign = ContentAlignment.MiddleRight;
             btnNewOrder.UseVisualStyleBackColor = false;
             btnNewOrder.Click += btnNewOrder_Click;
             // 

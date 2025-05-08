@@ -80,7 +80,7 @@ namespace client.Forms.Order
 
         private void UpdateDiscount(decimal updatedDiscount)
         {
-            isDiscountApplied = (updatedDiscount > 0) ? true : false;
+            isDiscountApplied = (updatedDiscount > 0);
             discountRate = updatedDiscount;
             UpdateSubTotal();
 
@@ -110,21 +110,39 @@ namespace client.Forms.Order
         private void UpdateSubTotal()
         {
             const decimal VAT_RATE = 0.12m;
-            var vatableItems = CurrentCart.Items.Where(item => item != null && item.isVatable == 1).ToList();
-            var nonVatableItems = CurrentCart.Items.Where(item => item == null || item.isVatable != 1).ToList();
 
-            decimal vatableGrossTotal = vatableItems.Sum(item => item.TotalPrice);
-            decimal nonVatableTotal = nonVatableItems.Sum(item => item.TotalPrice);
+            var vatableDiscountableItems = CurrentCart.Items
+                .Where(item => item != null && item.isVatable == 1 && item.isDiscountable == 1).ToList();
+
+            var vatableNonDiscountableItems = CurrentCart.Items
+                .Where(item => item != null && item.isVatable == 1 && item.isDiscountable == 0).ToList();
+
+            var nonVatableDiscountableItems = CurrentCart.Items
+                .Where(item => item == null || (item.isVatable != 1 && item.isDiscountable == 1)).ToList();
+
+            var nonVatableNonDiscountableItems = CurrentCart.Items
+                .Where(item => item == null || (item.isVatable != 1 && item.isDiscountable == 0)).ToList();
+
+            decimal vatableDiscountableTotal = vatableDiscountableItems.Sum(item => item.TotalPrice);
+            decimal vatableNonDiscountableTotal = vatableNonDiscountableItems.Sum(item => item.TotalPrice);
+            decimal nonVatableDiscountableTotal = nonVatableDiscountableItems.Sum(item => item.TotalPrice);
+            decimal nonVatableNonDiscountableTotal = nonVatableNonDiscountableItems.Sum(item => item.TotalPrice);
 
             if (isDiscountApplied && discountRate > 0)
             {
-                decimal vatableExemptSubtotal = vatableGrossTotal / (1 + VAT_RATE);
+                decimal vatableExemptSubtotal = vatableDiscountableTotal / (1 + VAT_RATE);
                 decimal discountAmount = vatableExemptSubtotal * discountRate;
-                decimal totalDue = (vatableExemptSubtotal - discountAmount) + nonVatableTotal;
 
-                _subTotal = totalDue;
+                decimal totalDue = (vatableExemptSubtotal - discountAmount)
+                    + vatableNonDiscountableTotal
+                    + nonVatableDiscountableTotal
+                    + nonVatableNonDiscountableTotal;
+
                 totalAmount = totalDue;
-                saleWoVAT = vatableExemptSubtotal + nonVatableTotal;
+                saleWoVAT = vatableExemptSubtotal
+                    + vatableNonDiscountableTotal
+                    + nonVatableDiscountableTotal
+                    + nonVatableNonDiscountableTotal;
                 VATAmount = 0m;
                 lessDiscount = discountAmount;
                 _discountAmount = discountAmount;
@@ -137,11 +155,14 @@ namespace client.Forms.Order
             }
             else
             {
-                _subTotal = vatableGrossTotal + nonVatableTotal;
+                _subTotal = vatableDiscountableTotal
+                    + vatableNonDiscountableTotal
+                    + nonVatableDiscountableTotal
+                    + nonVatableNonDiscountableTotal;
                 totalAmount = _subTotal;
 
-                decimal vatableSales = vatableGrossTotal / 1.12m;
-                decimal vat = vatableGrossTotal - vatableSales;
+                decimal vatableSales = (vatableDiscountableTotal + vatableNonDiscountableTotal) / 1.12m;
+                decimal vat = (vatableDiscountableTotal + vatableNonDiscountableTotal) - vatableSales;
 
                 VATAmount = vat;
                 saleWoVAT = vatableSales;
@@ -1102,7 +1123,20 @@ namespace client.Forms.Order
                 return;
             }
 
+            if (!HasDiscountableItems())
+            {
+                MessageBox.Show("There are no discountable items in the cart.",
+                    "No Eligible Items",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             new DiscountForm(_subTotal).ShowDialog();
+        }
+
+        private bool HasDiscountableItems()
+        {
+            return CurrentCart.Items.Any(item => item != null && item.isDiscountable == 1);
         }
 
         private void txtSearchInput_TextChanged(object sender, EventArgs e)

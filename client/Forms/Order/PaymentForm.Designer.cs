@@ -68,15 +68,19 @@
             btn7 = new Button();
             postPaymentTimer = new System.Windows.Forms.Timer(components);
             btnCancelPayment = new Button();
+            pnlHeader = new Panel();
+            lblTitle = new Label();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvMop).BeginInit();
             numpadPanel.SuspendLayout();
+            pnlHeader.SuspendLayout();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(10, 7);
+            label1.Location = new Point(12, 50);
             label1.Name = "label1";
             label1.Size = new Size(90, 21);
             label1.TabIndex = 0;
@@ -89,7 +93,7 @@
             btnConfirmPayment.FlatStyle = FlatStyle.Flat;
             btnConfirmPayment.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnConfirmPayment.ForeColor = Color.White;
-            btnConfirmPayment.Location = new Point(10, 478);
+            btnConfirmPayment.Location = new Point(12, 521);
             btnConfirmPayment.Name = "btnConfirmPayment";
             btnConfirmPayment.Size = new Size(311, 41);
             btnConfirmPayment.TabIndex = 0;
@@ -108,7 +112,6 @@
             dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = Color.White;
             dgvMop.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            dgvMop.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvMop.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMop.BackgroundColor = Color.White;
             dgvMop.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -132,7 +135,7 @@
             dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
             dgvMop.DefaultCellStyle = dataGridViewCellStyle4;
             dgvMop.EnableHeadersVisualStyles = false;
-            dgvMop.Location = new Point(10, 233);
+            dgvMop.Location = new Point(12, 276);
             dgvMop.MultiSelect = false;
             dgvMop.Name = "dgvMop";
             dgvMop.ReadOnly = true;
@@ -190,7 +193,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(10, 164);
+            label2.Location = new Point(12, 207);
             label2.Name = "label2";
             label2.Size = new Size(116, 20);
             label2.TabIndex = 6;
@@ -201,7 +204,7 @@
             btnRemove.FlatAppearance.BorderColor = Color.Black;
             btnRemove.FlatStyle = FlatStyle.Flat;
             btnRemove.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnRemove.Location = new Point(10, 391);
+            btnRemove.Location = new Point(12, 434);
             btnRemove.Name = "btnRemove";
             btnRemove.Size = new Size(312, 29);
             btnRemove.TabIndex = 5;
@@ -214,7 +217,7 @@
             btnApply.FlatAppearance.BorderColor = Color.Black;
             btnApply.FlatStyle = FlatStyle.Flat;
             btnApply.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnApply.Location = new Point(352, 166);
+            btnApply.Location = new Point(354, 209);
             btnApply.Name = "btnApply";
             btnApply.Size = new Size(311, 29);
             btnApply.TabIndex = 4;
@@ -226,7 +229,7 @@
             // 
             lblAmountPaid.BackColor = Color.FromArgb(232, 232, 232);
             lblAmountPaid.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAmountPaid.Location = new Point(10, 183);
+            lblAmountPaid.Location = new Point(12, 226);
             lblAmountPaid.Name = "lblAmountPaid";
             lblAmountPaid.Size = new Size(311, 29);
             lblAmountPaid.TabIndex = 3;
@@ -237,7 +240,7 @@
             // 
             paymentDetailsPanel.BackColor = Color.FromArgb(232, 232, 232);
             paymentDetailsPanel.BorderStyle = BorderStyle.FixedSingle;
-            paymentDetailsPanel.Location = new Point(349, 61);
+            paymentDetailsPanel.Location = new Point(351, 104);
             paymentDetailsPanel.Name = "paymentDetailsPanel";
             paymentDetailsPanel.Size = new Size(311, 100);
             paymentDetailsPanel.TabIndex = 3;
@@ -250,7 +253,7 @@
             cboPaymentMethod.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             cboPaymentMethod.FormattingEnabled = true;
             cboPaymentMethod.Items.AddRange(new object[] { "Cash", "Digital Payment" });
-            cboPaymentMethod.Location = new Point(349, 28);
+            cboPaymentMethod.Location = new Point(351, 71);
             cboPaymentMethod.Name = "cboPaymentMethod";
             cboPaymentMethod.Size = new Size(311, 29);
             cboPaymentMethod.TabIndex = 2;
@@ -260,7 +263,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(349, 7);
+            label4.Location = new Point(351, 50);
             label4.Name = "label4";
             label4.Size = new Size(156, 21);
             label4.TabIndex = 1;
@@ -268,10 +271,9 @@
             // 
             // lblAmountToPay
             // 
-            lblAmountToPay.Anchor = AnchorStyles.None;
             lblAmountToPay.BackColor = Color.FromArgb(232, 232, 232);
             lblAmountToPay.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAmountToPay.Location = new Point(10, 28);
+            lblAmountToPay.Location = new Point(12, 71);
             lblAmountToPay.Name = "lblAmountToPay";
             lblAmountToPay.Size = new Size(311, 29);
             lblAmountToPay.TabIndex = 1;
@@ -282,7 +284,7 @@
             // 
             lblChange.BackColor = Color.FromArgb(232, 232, 232);
             lblChange.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblChange.Location = new Point(10, 131);
+            lblChange.Location = new Point(12, 174);
             lblChange.Name = "lblChange";
             lblChange.Size = new Size(312, 29);
             lblChange.TabIndex = 4;
@@ -293,7 +295,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.Location = new Point(10, 112);
+            label6.Location = new Point(12, 155);
             label6.Name = "label6";
             label6.Size = new Size(73, 20);
             label6.TabIndex = 3;
@@ -303,7 +305,7 @@
             // 
             lblBalance.BackColor = Color.FromArgb(232, 232, 232);
             lblBalance.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblBalance.Location = new Point(10, 80);
+            lblBalance.Location = new Point(12, 123);
             lblBalance.Name = "lblBalance";
             lblBalance.Size = new Size(311, 29);
             lblBalance.TabIndex = 2;
@@ -314,7 +316,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(10, 61);
+            label3.Location = new Point(12, 104);
             label3.Name = "label3";
             label3.Size = new Size(78, 20);
             label3.TabIndex = 1;
@@ -322,7 +324,7 @@
             // 
             // numpadPanel
             // 
-            numpadPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            numpadPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             numpadPanel.BackColor = Color.FromArgb(232, 232, 232);
             numpadPanel.Controls.Add(btnDelete);
             numpadPanel.Controls.Add(btnDot);
@@ -336,7 +338,7 @@
             numpadPanel.Controls.Add(btn9);
             numpadPanel.Controls.Add(btn8);
             numpadPanel.Controls.Add(btn7);
-            numpadPanel.Location = new Point(352, 233);
+            numpadPanel.Location = new Point(354, 276);
             numpadPanel.Name = "numpadPanel";
             numpadPanel.Size = new Size(308, 333);
             numpadPanel.TabIndex = 1;
@@ -348,7 +350,7 @@
             btnDelete.FlatAppearance.BorderColor = Color.Gray;
             btnDelete.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnDelete.Image = Properties.Resources.delete_24;
-            btnDelete.Location = new Point(206, 255);
+            btnDelete.Location = new Point(206, 263);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(70, 70);
             btnDelete.TabIndex = 11;
@@ -363,7 +365,7 @@
             btnDot.CausesValidation = false;
             btnDot.FlatAppearance.BorderColor = Color.Gray;
             btnDot.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnDot.Location = new Point(119, 255);
+            btnDot.Location = new Point(119, 263);
             btnDot.Name = "btnDot";
             btnDot.Size = new Size(70, 70);
             btnDot.TabIndex = 10;
@@ -377,7 +379,7 @@
             btn0.CausesValidation = false;
             btn0.FlatAppearance.BorderColor = Color.Gray;
             btn0.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btn0.Location = new Point(32, 255);
+            btn0.Location = new Point(32, 263);
             btn0.Name = "btn0";
             btn0.Size = new Size(70, 70);
             btn0.TabIndex = 9;
@@ -392,7 +394,7 @@
             btn3.CausesValidation = false;
             btn3.FlatAppearance.BorderColor = Color.Gray;
             btn3.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btn3.Location = new Point(206, 173);
+            btn3.Location = new Point(206, 181);
             btn3.Name = "btn3";
             btn3.Size = new Size(70, 70);
             btn3.TabIndex = 8;
@@ -406,7 +408,7 @@
             btn2.CausesValidation = false;
             btn2.FlatAppearance.BorderColor = Color.Gray;
             btn2.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btn2.Location = new Point(119, 173);
+            btn2.Location = new Point(119, 181);
             btn2.Name = "btn2";
             btn2.Size = new Size(70, 70);
             btn2.TabIndex = 7;
@@ -420,7 +422,7 @@
             btn1.CausesValidation = false;
             btn1.FlatAppearance.BorderColor = Color.Gray;
             btn1.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btn1.Location = new Point(32, 173);
+            btn1.Location = new Point(32, 181);
             btn1.Name = "btn1";
             btn1.Size = new Size(70, 70);
             btn1.TabIndex = 6;
@@ -434,7 +436,7 @@
             btn6.CausesValidation = false;
             btn6.FlatAppearance.BorderColor = Color.Gray;
             btn6.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btn6.Location = new Point(206, 91);
+            btn6.Location = new Point(206, 99);
             btn6.Name = "btn6";
             btn6.Size = new Size(70, 70);
             btn6.TabIndex = 5;
@@ -448,7 +450,7 @@
             btn5.CausesValidation = false;
             btn5.FlatAppearance.BorderColor = Color.Gray;
             btn5.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btn5.Location = new Point(119, 91);
+            btn5.Location = new Point(119, 99);
             btn5.Name = "btn5";
             btn5.Size = new Size(70, 70);
             btn5.TabIndex = 4;
@@ -462,7 +464,7 @@
             btn4.CausesValidation = false;
             btn4.FlatAppearance.BorderColor = Color.Gray;
             btn4.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btn4.Location = new Point(32, 91);
+            btn4.Location = new Point(32, 99);
             btn4.Name = "btn4";
             btn4.Size = new Size(70, 70);
             btn4.TabIndex = 3;
@@ -476,7 +478,7 @@
             btn9.CausesValidation = false;
             btn9.FlatAppearance.BorderColor = Color.Gray;
             btn9.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btn9.Location = new Point(206, 9);
+            btn9.Location = new Point(206, 17);
             btn9.Name = "btn9";
             btn9.Size = new Size(70, 70);
             btn9.TabIndex = 2;
@@ -490,7 +492,7 @@
             btn8.CausesValidation = false;
             btn8.FlatAppearance.BorderColor = Color.Gray;
             btn8.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btn8.Location = new Point(119, 9);
+            btn8.Location = new Point(119, 17);
             btn8.Name = "btn8";
             btn8.Size = new Size(70, 70);
             btn8.TabIndex = 1;
@@ -504,7 +506,7 @@
             btn7.CausesValidation = false;
             btn7.FlatAppearance.BorderColor = Color.Gray;
             btn7.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btn7.Location = new Point(32, 9);
+            btn7.Location = new Point(32, 17);
             btn7.Name = "btn7";
             btn7.Size = new Size(70, 70);
             btn7.TabIndex = 0;
@@ -524,7 +526,7 @@
             btnCancelPayment.FlatStyle = FlatStyle.Flat;
             btnCancelPayment.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnCancelPayment.ForeColor = Color.White;
-            btnCancelPayment.Location = new Point(10, 525);
+            btnCancelPayment.Location = new Point(12, 568);
             btnCancelPayment.Name = "btnCancelPayment";
             btnCancelPayment.Size = new Size(311, 41);
             btnCancelPayment.TabIndex = 7;
@@ -532,12 +534,50 @@
             btnCancelPayment.UseVisualStyleBackColor = false;
             btnCancelPayment.Click += btnCancelPayment_Click;
             // 
+            // pnlHeader
+            // 
+            pnlHeader.BackColor = Color.FromArgb(121, 85, 72);
+            pnlHeader.Controls.Add(label5);
+            pnlHeader.Controls.Add(lblTitle);
+            pnlHeader.Dock = DockStyle.Top;
+            pnlHeader.Location = new Point(0, 0);
+            pnlHeader.Margin = new Padding(3, 2, 3, 2);
+            pnlHeader.Name = "pnlHeader";
+            pnlHeader.Size = new Size(673, 34);
+            pnlHeader.TabIndex = 62;
+            // 
+            // lblTitle
+            // 
+            lblTitle.Anchor = AnchorStyles.Left;
+            lblTitle.AutoSize = true;
+            lblTitle.BackColor = Color.FromArgb(121, 85, 72);
+            lblTitle.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitle.ForeColor = Color.White;
+            lblTitle.Location = new Point(13, -27);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(358, 25);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "Inventory Management - Add New Item";
+            // 
+            // label5
+            // 
+            label5.Anchor = AnchorStyles.Left;
+            label5.AutoSize = true;
+            label5.BackColor = Color.FromArgb(121, 85, 72);
+            label5.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.ForeColor = Color.White;
+            label5.Location = new Point(12, 5);
+            label5.Name = "label5";
+            label5.Size = new Size(87, 25);
+            label5.TabIndex = 1;
+            label5.Text = "Payment";
+            // 
             // PaymentForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(673, 576);
+            ClientSize = new Size(673, 622);
             Controls.Add(btnCancelPayment);
             Controls.Add(label2);
             Controls.Add(btnRemove);
@@ -555,7 +595,8 @@
             Controls.Add(lblAmountToPay);
             Controls.Add(lblBalance);
             Controls.Add(numpadPanel);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Controls.Add(pnlHeader);
+            FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "PaymentForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -564,6 +605,8 @@
             Load += PaymentForm_Load;
             ((System.ComponentModel.ISupportInitialize)dgvMop).EndInit();
             numpadPanel.ResumeLayout(false);
+            pnlHeader.ResumeLayout(false);
+            pnlHeader.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -602,5 +645,8 @@
         private DataGridViewTextBoxColumn mode;
         private DataGridViewTextBoxColumn amount;
         private DataGridViewTextBoxColumn refnumber;
+        private Panel pnlHeader;
+        private Label lblTitle;
+        private Label label5;
     }
 }

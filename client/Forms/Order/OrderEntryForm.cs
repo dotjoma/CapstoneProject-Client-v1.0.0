@@ -73,13 +73,16 @@ namespace client.Forms.Order
 
         decimal VATAmount = 0; // 12%
         decimal saleWoVAT = 0;
-        decimal lessDiscount = 0; // PWD/Senior discount usually 20%
+        decimal lessDiscount = 0; // PWD/Senior discount 20%
         private decimal _discountAmount = 0;
-        private decimal _totalDue = 0;
+        private bool isDiscountApplied;
+        private decimal discountRate = 0;
 
         private void UpdateDiscount(decimal updatedDiscount)
         {
-            Logger.Write("DISCOUNT_DEBUG", $"Updated Discount: {updatedDiscount}");
+            isDiscountApplied = (updatedDiscount > 0) ? true : false;
+            discountRate = updatedDiscount;
+            UpdateSubTotal();
 
             const decimal VAT_RATE = 0.12m;
 
@@ -96,9 +99,8 @@ namespace client.Forms.Order
             VATAmount = 0m;
             lessDiscount = discountAmount;
             _discountAmount = discountAmount;
-            _totalDue = totalDue;
 
-            lblSubTotal.Text = totalDue.ToString("F2");
+            lblSubTotal.Text = _subTotal.ToString("F2");
             lblTotal.Text = totalDue.ToString("F2");     
             lblVatable.Text = "0.00";                                                
             lblVatAmount.Text = "0.00";   
@@ -107,28 +109,51 @@ namespace client.Forms.Order
 
         private void UpdateSubTotal()
         {
-            var vatableItems = CurrentCart.Items
-                .Where(item =>
-                    item != null &&
-                    item.isVatable == 1)
-                .ToList();
+            const decimal VAT_RATE = 0.12m;
+            var vatableItems = CurrentCart.Items.Where(item => item != null && item.isVatable == 1).ToList();
+            var nonVatableItems = CurrentCart.Items.Where(item => item == null || item.isVatable != 1).ToList();
 
-            Logger.Write("SUBTOTAL_DEBUG", $"Vatable Items: {vatableItems}");
+            decimal vatableGrossTotal = vatableItems.Sum(item => item.TotalPrice);
+            decimal nonVatableTotal = nonVatableItems.Sum(item => item.TotalPrice);
 
-            decimal vatableSales = _subTotal / 1.12m;
-            decimal vat = _subTotal - vatableSales;
-            totalAmount = _subTotal;
-            _totalDue = _subTotal;
+            if (isDiscountApplied && discountRate > 0)
+            {
+                decimal vatableExemptSubtotal = vatableGrossTotal / (1 + VAT_RATE);
+                decimal discountAmount = vatableExemptSubtotal * discountRate;
+                decimal totalDue = (vatableExemptSubtotal - discountAmount) + nonVatableTotal;
 
-            VATAmount = vat;
-            saleWoVAT = vatableSales;
-            lessDiscount = saleWoVAT * _discountAmount;
+                _subTotal = totalDue;
+                totalAmount = totalDue;
+                saleWoVAT = vatableExemptSubtotal + nonVatableTotal;
+                VATAmount = 0m;
+                lessDiscount = discountAmount;
+                _discountAmount = discountAmount;
 
-            lblSubTotal.Text = _subTotal.ToString("F2");
-            lblTotal.Text = _subTotal.ToString("F2");
-            lblVatable.Text = vatableSales.ToString("F2");
-            lblVatAmount.Text = VATAmount.ToString("F2");
-            lblDiscount.Text = _discountAmount.ToString("F2");
+                lblSubTotal.Text = _subTotal.ToString("F2");
+                lblTotal.Text = totalDue.ToString("F2");
+                lblVatable.Text = "0.00";
+                lblVatAmount.Text = "0.00";
+                lblDiscount.Text = discountAmount.ToString("F2");
+            }
+            else
+            {
+                _subTotal = vatableGrossTotal + nonVatableTotal;
+                totalAmount = _subTotal;
+
+                decimal vatableSales = vatableGrossTotal / 1.12m;
+                decimal vat = vatableGrossTotal - vatableSales;
+
+                VATAmount = vat;
+                saleWoVAT = vatableSales;
+                lessDiscount = saleWoVAT * discountRate;
+                _discountAmount = 0;
+
+                lblSubTotal.Text = _subTotal.ToString("F2");
+                lblTotal.Text = _subTotal.ToString("F2");
+                lblVatable.Text = vatableSales.ToString("F2");
+                lblVatAmount.Text = VATAmount.ToString("F2");
+                lblDiscount.Text = "0.00";
+            }
         }
 
         private async void OrderEntryForm_Load(object sender, EventArgs e)
@@ -699,11 +724,16 @@ namespace client.Forms.Order
                 return;
             }
 
-            _subTotal += product.productPrice;
-            UpdateSubTotal();
-
             AddProductToCart(product);
+            _subTotal += product.productPrice;
+            BeginInvoke(new Action(() => {
+                UpdateSubTotal();
+                UpdateCartUI(product);
+            }));
+        }
 
+        private void UpdateCartUI(Product product)
+        {
             if (cartContainerPanel == null)
             {
                 MessageBox.Show("Cart panel is not initialized.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -717,7 +747,6 @@ namespace client.Forms.Order
                     if (existingProduct.productId == product.productId)
                     {
                         Label? quantityLabel = existingCartItem.Controls.OfType<Label>().FirstOrDefault(l => l.Name == "lblQuantity");
-
                         if (quantityLabel != null)
                         {
                             int currentQuantity = int.Parse(quantityLabel.Text.Replace("Qty: ", ""));
@@ -728,6 +757,11 @@ namespace client.Forms.Order
                 }
             }
 
+            CreateCartItemUI(product);
+        }
+
+        private void CreateCartItemUI(Product product)
+        {
             var cartItem = new Panel
             {
                 Width = GetCartItemWidth(),
@@ -841,38 +875,31 @@ namespace client.Forms.Order
 
             btnMinus.Click += (sender, e) =>
             {
-                int currentQuantity = int.Parse(lblQuantity.Text.Replace("Qty: ", ""));
-                if (currentQuantity > 1)
+                var cartItem = CurrentCart.Items.FirstOrDefault(item => item.productId == product.productId);
+                if (cartItem != null && cartItem.Quantity > 1)
                 {
-                    lblQuantity.Text = $"Qty: {currentQuantity - 1}";
-
+                    cartItem.Quantity -= 1;
                     _subTotal -= product.productPrice;
-                    CurrentCart.UpdateItemQuantity(product.productId, currentQuantity - 1);
-                    UpdateSubTotal();
 
-                    if (AppliedDiscount.DiscountedItems.ContainsKey(product.productId))
-                    {
-                        AppliedDiscount.DecrementDiscount(product.productId);
-                    }
+                    BeginInvoke(new Action(() => {
+                        lblQuantity.Text = $"Qty: {cartItem.Quantity}";
+                        UpdateSubTotal();
+                    }));
                 }
             };
 
             btnPlus.Click += (sender, e) =>
             {
-                int currentQuantity = int.Parse(lblQuantity.Text.Replace("Qty: ", ""));
-                lblQuantity.Text = $"Qty: {currentQuantity + 1}";
-
-                _subTotal += product.productPrice;
-                CurrentCart.UpdateItemQuantity(product.productId, currentQuantity + 1);
-                UpdateSubTotal();
-
-                if (AppliedDiscount.DiscountedItems.ContainsKey(product.productId))
+                var cartItem = CurrentCart.Items.FirstOrDefault(item => item.productId == product.productId);
+                if (cartItem != null)
                 {
-                    AppliedDiscount.IncrementDiscount(product.productId);
-                }
-                else
-                {
-                    AppliedDiscount.AddDiscount(product.productId, product.productPrice, 1);
+                    cartItem.Quantity += 1;
+                    _subTotal += product.productPrice;
+
+                    BeginInvoke(new Action(() => {
+                        lblQuantity.Text = $"Qty: {cartItem.Quantity}";
+                        UpdateSubTotal();
+                    }));
                 }
             };
 
@@ -896,19 +923,19 @@ namespace client.Forms.Order
 
             btnRemove.Click += (s, e) =>
             {
-                Label? quantityLabel = cartItem.Controls.OfType<Label>().FirstOrDefault(l => l.Name == "lblQuantity");
-
-                if (quantityLabel != null)
+                var cartItemToRemove = CurrentCart.Items.FirstOrDefault(item => item.productId == product.productId);
+                if (cartItemToRemove != null)
                 {
-                    int currentQuantity = int.Parse(quantityLabel.Text.Replace("Qty: ", ""));
-                    _subTotal -= product.productPrice * currentQuantity;
+                    _subTotal -= cartItemToRemove.TotalPrice;
+
+                    CurrentCart.RemoveItem(product.productId);
+                    AppliedDiscount.RemoveDiscount(product.productId);
+
+                    BeginInvoke(new Action(() => {
+                        UpdateSubTotal();
+                        cartContainerPanel.Controls.Remove(cartItem);
+                    }));
                 }
-
-                UpdateSubTotal();
-                CurrentCart.RemoveItem(product.productId);
-                AppliedDiscount.RemoveDiscount(product.productId);
-
-                cartContainerPanel.Controls.Remove(cartItem);
             };
 
             cartItem.Controls.Add(picProductImage);
@@ -1187,7 +1214,7 @@ namespace client.Forms.Order
                 return;
             }
 
-            var paymentForm = new PaymentForm(_totalDue, orderType,_discountAmount);
+            var paymentForm = new PaymentForm(_subTotal, orderType,_discountAmount);
             paymentForm.ShowDialog();
         }
 
@@ -1273,7 +1300,6 @@ namespace client.Forms.Order
         {
             _subTotal = 0;
             totalAmount = 0;
-            _totalDue = 0;
             _discountAmount = 0;
             VATAmount = 0;
             saleWoVAT = 0;
@@ -1286,6 +1312,8 @@ namespace client.Forms.Order
             lblVatable.Text = "0.00";
             lblVatAmount.Text = "0.00";
             lblDiscount.Text = "0.00";
+
+            isDiscountApplied = false;
 
             CurrentCart.ClearCart();
             CurrentTransaction.Clear();

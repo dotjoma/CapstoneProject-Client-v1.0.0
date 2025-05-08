@@ -166,13 +166,15 @@ namespace client.Controls.Products
             };
         }
 
-        private void HandleAddToCart(Product product)
+        private async void HandleAddToCart(Product product)
         {
             if (OrderEntryForm.Instance != null)
             {
                 if (!string.IsNullOrEmpty(product.productImage))
                 {
-                    product.ProductImageObject = ConvertBase64ToImage(product.productImage);
+                    await Task.Run(() => {
+                        product.ProductImageObject = ConvertBase64ToImage(product.productImage);
+                    });
                 }
 
                 OrderEntryForm.Instance.AddCartItem(product);
